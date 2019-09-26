@@ -4,6 +4,7 @@ module Data.Syntax.Sum
   (:+:)(..)
   -- * Membership
 , Inject(..)
+, Project(..)
 ) where
 
 import Data.Syntax.Functor
@@ -42,3 +43,6 @@ instance {-# OVERLAPPABLE #-}
          Inject t r
       => Inject t (l :+: r) where
   inj = R . inj
+
+class Project t u where
+  prj :: u m a -> Maybe (t m a)
