@@ -43,6 +43,7 @@ library
     Data.Syntax.Scope
     Data.Syntax.Stack
     Data.Syntax.Sum
+    Data.Syntax.Term
   -- other-modules:
   -- other-extensions:
   build-depends:
