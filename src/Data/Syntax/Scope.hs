@@ -20,6 +20,7 @@ module Data.Syntax.Scope
   -- * Scope transformers
 , ScopeT(..)
 , unScopeT
+, fromScopeT
   -- * Prefixes
 , unprefix
 , unprefixEither
@@ -147,6 +148,10 @@ newtype ScopeT a t f b = ScopeT (t f (Var a (f b)))
 
 unScopeT :: ScopeT a t f b -> t f (Var a (f b))
 unScopeT (ScopeT s) = s
+
+
+fromScopeT :: (RightModule t, Monad f) => ScopeT a t f b -> t f (Var a b)
+fromScopeT = unScopeT >=>* sequenceA
 
 
 -- | Unwrap a (possibly-empty) prefix of @a@s wrapping a @t@ using a helper function.
