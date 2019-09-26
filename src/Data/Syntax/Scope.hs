@@ -72,6 +72,10 @@ instance HFunctor (Scope a) where
 instance (Eq   a, Eq   b, forall a . Eq   a => Eq   (f a), Monad f) => Eq   (Scope a f b) where
   (==) = (==) `on` fromScope
 
+instance (Ord  a, Ord  b, forall a . Eq   a => Eq   (f a)
+                        , forall a . Ord  a => Ord  (f a), Monad f) => Ord  (Scope a f b) where
+  compare = compare `on` fromScope
+
 instance Applicative f => Applicative (Scope a f) where
   pure = Scope . pure . S . pure
   Scope f <*> Scope a = Scope (liftA2 (liftA2 (<*>)) f a)
