@@ -1,6 +1,7 @@
 {-# LANGUAGE DeriveGeneric, DeriveTraversable, PolyKinds, TypeOperators #-}
 module Data.Syntax.Sum
-( (:+:)(..)
+( -- * Sum syntax
+  (:+:)(..)
 ) where
 
 import Data.Syntax.Functor
