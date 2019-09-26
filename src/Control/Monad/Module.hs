@@ -1,6 +1,7 @@
 module Control.Monad.Module
 ( RightModule(..)
 , (>=>*)
+, (<=<*)
 ) where
 
 class RightModule f where
@@ -12,3 +13,8 @@ class RightModule f where
 f >=>* g = \x -> f x >>=* g
 
 infixl 1 >=>*
+
+(<=<*) :: (RightModule f, Monad m) => (b -> m c) -> (a -> f m b) -> (a -> f m c)
+g <=<* f = \x -> f x >>=* g
+
+infixl 1 <=<*
