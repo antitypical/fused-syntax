@@ -1,10 +1,12 @@
-{-# LANGUAGE DeriveTraversable, QuantifiedConstraints, StandaloneDeriving, UndecidableInstances #-}
+{-# LANGUAGE DeriveTraversable, QuantifiedConstraints, RankNTypes, StandaloneDeriving, UndecidableInstances #-}
 module Data.Syntax.Term
 ( Term(..)
+, hoistTerm
 ) where
 
 import Control.Monad (ap)
 import Control.Monad.Module
+import Data.Syntax.Functor
 
 data Term sig a
   = Var a
@@ -45,3 +47,9 @@ instance ( RightModule sig
       => Monad (Term sig) where
   Var  a >>= f = f a
   Term t >>= f = Term (t >>=* f)
+
+
+hoistTerm :: (HFunctor sig, forall g . Functor g => Functor (sig g)) => (forall m x . sig m x -> sig' m x) -> Term sig a -> Term sig' a
+hoistTerm f = go
+  where go (Var v)  = Var v
+        go (Term t) = Term (f (hmap (hoistTerm f) t))
