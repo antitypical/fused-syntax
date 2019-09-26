@@ -30,39 +30,39 @@ import Data.Syntax.Functor
 import Data.Syntax.Stack
 
 data Var a b
-  = Z a
-  | S b
+  = B a
+  | F b
   deriving (Eq, Foldable, Functor, Ord, Show, Traversable)
 
 instance Bifoldable Var where
   bifoldMap f g = \case
-    Z a -> f a
-    S a -> g a
+    B a -> f a
+    F a -> g a
 
 instance Bifunctor Var where
   bimap f g = \case
-    Z a -> Z (f a)
-    S a -> S (g a)
+    B a -> B (f a)
+    F a -> F (g a)
 
 instance Bitraversable Var where
   bitraverse f g = \case
-    Z a -> Z <$> f a
-    S a -> S <$> g a
+    B a -> B <$> f a
+    F a -> F <$> g a
 
 instance Applicative (Var a) where
-  pure = S
-  Z a <*> _ = Z a
-  S f <*> a = f <$> a
+  pure = F
+  B a <*> _ = B a
+  F f <*> a = f <$> a
 
 instance Monad (Var a) where
-  Z a >>= _ = Z a
-  S a >>= f = f a
+  B a >>= _ = B a
+  F a >>= f = f a
 
 unVar :: (a -> c) -> (b -> c) -> Var a b -> c
-unVar z s = \case { Z a -> z a ; S b -> s b }
+unVar z s = \case { B a -> z a ; F b -> s b }
 
 matchEither :: Applicative f => (b -> Either a c) -> b -> Var a (f c)
-matchEither f x = either Z (S . pure) (f x)
+matchEither f x = either B (F . pure) (f x)
 
 matchMaybe :: (b -> Maybe a) -> (b -> Either a b)
 matchMaybe f a = maybe (Right a) Left (f a)
@@ -88,14 +88,14 @@ instance (Ord  a, Ord  b, forall a . Eq   a => Eq   (f a)
 deriving instance (Show a, Show b, forall a . Show a => Show (f a)) => Show (Scope a f b)
 
 instance Applicative f => Applicative (Scope a f) where
-  pure = Scope . pure . S . pure
+  pure = Scope . pure . F . pure
   Scope f <*> Scope a = Scope (liftA2 (liftA2 (<*>)) f a)
 
 instance Monad f => Monad (Scope a f) where
-  Scope e >>= f = Scope (e >>= unVar (pure . Z) (>>= unScope . f))
+  Scope e >>= f = Scope (e >>= unVar (pure . B) (>>= unScope . f))
 
 instance MonadTrans (Scope a) where
-  lift = Scope . pure . S
+  lift = Scope . pure . F
 
 instance RightModule (Scope a) where
   Scope m >>=* f = Scope (fmap (>>= f) <$> m)
