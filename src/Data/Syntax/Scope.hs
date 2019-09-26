@@ -8,6 +8,7 @@ module Data.Syntax.Scope
 , closed
   -- * Scopes
 , Scope(..)
+, unScope
 , fromScope
 , toScope
 , abstract1
