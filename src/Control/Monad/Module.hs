@@ -2,6 +2,7 @@ module Control.Monad.Module
 ( RightModule(..)
 , (>=>*)
 , (<=<*)
+, joinr
 ) where
 
 class RightModule f where
@@ -18,3 +19,6 @@ infixl 1 >=>*
 g <=<* f = \x -> f x >>=* g
 
 infixl 1 <=<*
+
+joinr :: (RightModule f, Monad m) => f m (m a) -> f m a
+joinr = (>>=* id)
