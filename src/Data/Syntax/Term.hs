@@ -50,7 +50,7 @@ instance ( RightModule sig
   Term t >>= f = Term (t >>=* f)
 
 
-instance HFunctor sig => Algebra sig (Term sig) where
+instance (HFunctor sig, forall f . Functor f => Functor (sig f)) => Algebra sig (Term sig) where
   gen = Var
   alg = Term
 
