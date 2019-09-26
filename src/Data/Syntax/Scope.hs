@@ -7,6 +7,7 @@ module Data.Syntax.Scope
 , closed
 , Scope(..)
 , fromScope
+, toScope
 ) where
 
 import Control.Applicative (liftA2)
@@ -83,3 +84,6 @@ instance RightModule (Scope a) where
 
 fromScope :: Monad f => Scope a f b -> f (Incr a b)
 fromScope = unScope >=> sequenceA
+
+toScope :: Applicative f => f (Incr a b) -> Scope a f b
+toScope = Scope . fmap (fmap pure)
