@@ -1,7 +1,9 @@
-{-# LANGUAGE DeriveGeneric, DeriveTraversable, PolyKinds, TypeOperators #-}
+{-# LANGUAGE DeriveGeneric, DeriveTraversable, MultiParamTypeClasses, PolyKinds, TypeOperators #-}
 module Data.Syntax.Sum
 ( -- * Sum syntax
   (:+:)(..)
+  -- * Membership
+, Inject(..)
 ) where
 
 import Data.Syntax.Functor
@@ -13,3 +15,7 @@ data (f :+: g) t a
   deriving (Eq, Foldable, Functor, Generic, Generic1, Ord, Show, Traversable)
 
 instance (HFunctor f, HFunctor g) => HFunctor (f :+: g)
+
+
+class Inject t u where
+  inj :: t m a -> u m a
