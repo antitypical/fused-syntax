@@ -9,6 +9,7 @@ module Data.Syntax.Scope
 ) where
 
 import Control.Applicative (liftA2)
+import Control.Monad.Module
 import Data.Bifoldable
 import Data.Bifunctor
 import Data.Bitraversable
@@ -69,3 +70,6 @@ instance Applicative f => Applicative (Scope a f) where
 
 instance Monad f => Monad (Scope a f) where
   Scope e >>= f = Scope (e >>= incr (pure . Z) (>>= unScope . f))
+
+instance RightModule (Scope a) where
+  Scope m >>=* f = Scope (fmap (>>= f) <$> m)
