@@ -72,8 +72,11 @@ closed :: Traversable f => f a -> Maybe (f b)
 closed = traverse (const Nothing)
 
 
-newtype Scope a f b = Scope { unScope :: f (Var a (f b)) }
+newtype Scope a f b = Scope (f (Var a (f b)))
   deriving (Foldable, Functor, Traversable)
+
+unScope :: Scope a f b -> f (Var a (f b))
+unScope (Scope s) = s
 
 instance HFunctor (Scope a) where
   hmap f = Scope . f . fmap (fmap f) . unScope
