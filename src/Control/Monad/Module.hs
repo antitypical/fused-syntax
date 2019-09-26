@@ -6,6 +6,7 @@ module Control.Monad.Module
 , joinr
   -- * Left modules
 , LeftModule(..)
+, (*>=>)
 ) where
 
 -- | Modules over monads allow lifting of a monad’s product (i.e. 'Control.Monad.join') into another structure composed with the monad. A right-module @f m@ over a monad @m@ therefore allows one to extend @m@’s '>>=' operation to values of @f m@ using the '>>=*' operator.
@@ -49,3 +50,8 @@ joinr = (>>=* id)
 class LeftModule f where
   (*>>=) :: Monad m => m a -> (a -> f m b) -> f m b
   infixl 1 *>>=
+
+(*>=>) :: (LeftModule f, Monad m) => (a -> m b) -> (b -> f m c) -> (a -> f m c)
+f *>=> g = \x -> f x *>>= g
+
+infixl 1 *>=>
