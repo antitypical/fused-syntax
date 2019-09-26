@@ -1,6 +1,6 @@
 {-# LANGUAGE DeriveTraversable, LambdaCase, QuantifiedConstraints, StandaloneDeriving #-}
 module Data.Syntax.Scope
-( Incr(..)
+( Var(..)
 , incr
 , matchEither
 , matchMaybe
@@ -29,39 +29,39 @@ import Data.Function (on)
 import Data.Syntax.Functor
 import Data.Syntax.Stack
 
-data Incr a b
+data Var a b
   = Z a
   | S b
   deriving (Eq, Foldable, Functor, Ord, Show, Traversable)
 
-instance Bifoldable Incr where
+instance Bifoldable Var where
   bifoldMap f g = \case
     Z a -> f a
     S a -> g a
 
-instance Bifunctor Incr where
+instance Bifunctor Var where
   bimap f g = \case
     Z a -> Z (f a)
     S a -> S (g a)
 
-instance Bitraversable Incr where
+instance Bitraversable Var where
   bitraverse f g = \case
     Z a -> Z <$> f a
     S a -> S <$> g a
 
-instance Applicative (Incr a) where
+instance Applicative (Var a) where
   pure = S
   Z a <*> _ = Z a
   S f <*> a = f <$> a
 
-instance Monad (Incr a) where
+instance Monad (Var a) where
   Z a >>= _ = Z a
   S a >>= f = f a
 
-incr :: (a -> c) -> (b -> c) -> Incr a b -> c
+incr :: (a -> c) -> (b -> c) -> Var a b -> c
 incr z s = \case { Z a -> z a ; S b -> s b }
 
-matchEither :: Applicative f => (b -> Either a c) -> b -> Incr a (f c)
+matchEither :: Applicative f => (b -> Either a c) -> b -> Var a (f c)
 matchEither f x = either Z (S . pure) (f x)
 
 matchMaybe :: (b -> Maybe a) -> (b -> Either a b)
@@ -72,7 +72,7 @@ closed :: Traversable f => f a -> Maybe (f b)
 closed = traverse (const Nothing)
 
 
-newtype Scope a f b = Scope { unScope :: f (Incr a (f b)) }
+newtype Scope a f b = Scope { unScope :: f (Var a (f b)) }
   deriving (Foldable, Functor, Traversable)
 
 instance HFunctor (Scope a) where
@@ -101,10 +101,10 @@ instance RightModule (Scope a) where
   Scope m >>=* f = Scope (fmap (>>= f) <$> m)
 
 
-fromScope :: Monad f => Scope a f b -> f (Incr a b)
+fromScope :: Monad f => Scope a f b -> f (Var a b)
 fromScope = unScope >=> sequenceA
 
-toScope :: Applicative f => f (Incr a b) -> Scope a f b
+toScope :: Applicative f => f (Var a b) -> Scope a f b
 toScope = Scope . fmap (fmap pure)
 
 
