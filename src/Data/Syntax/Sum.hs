@@ -20,10 +20,12 @@ instance (HFunctor f, HFunctor g) => HFunctor (f :+: g)
 class Inject t u where
   inj :: t m a -> u m a
 
-instance {-# OVERLAPPABLE #-} Inject t t where
+instance {-# OVERLAPPABLE #-}
+         Inject t t where
   inj = id
 
-instance {-# OVERLAPPABLE #-} Inject t (t :+: r) where
+instance {-# OVERLAPPABLE #-}
+         Inject t (t :+: r) where
   inj = L
 
 instance {-# OVERLAPPABLE #-}
