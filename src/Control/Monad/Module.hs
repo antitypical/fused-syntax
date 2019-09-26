@@ -48,3 +48,4 @@ joinr = (>>=* id)
 
 class LeftModule f where
   (*>>=) :: Monad m => m a -> (a -> f m b) -> f m b
+  infixl 1 *>>=
