@@ -37,6 +37,7 @@ library
   import: common
   hs-source-dirs: src
   exposed-modules:
+    Data.Syntax.Algebra
     Data.Syntax.Functor
     Data.Syntax.Sum
   -- other-modules:
