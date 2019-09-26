@@ -10,6 +10,13 @@ data Term sig a
   = Var a
   | Term (sig (Term sig) a)
 
+deriving instance ( Eq a
+                  , RightModule sig
+                  , forall f . Functor f => Functor (sig f)
+                  , forall g x . (Eq  x, Monad g, forall y . Eq  y => Eq  (g y)) => Eq  (sig g x)
+                  )
+               => Eq  (Term sig a)
+
 deriving instance ( forall g . Foldable    g => Foldable    (sig g)) => Foldable    (Term sig)
 deriving instance ( forall g . Functor     g => Functor     (sig g)) => Functor     (Term sig)
 deriving instance ( forall g . Foldable    g => Foldable    (sig g)
