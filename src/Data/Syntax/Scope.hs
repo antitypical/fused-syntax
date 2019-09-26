@@ -14,6 +14,7 @@ module Data.Syntax.Scope
 , instantiate1
 , instantiate
 , instantiateEither
+, unprefixEither
 ) where
 
 import Control.Applicative (liftA2)
@@ -25,6 +26,7 @@ import Data.Bifunctor
 import Data.Bitraversable
 import Data.Function (on)
 import Data.Syntax.Functor
+import Data.Syntax.Stack
 
 data Incr a b
   = Z a
@@ -125,3 +127,13 @@ instantiate f = instantiateEither (either f pure)
 
 instantiateEither :: Monad f => (Either a b -> f c) -> Scope a f b -> f c
 instantiateEither f = unScope >=> incr (f . Left) (>>= f . Right)
+
+
+unprefixEither
+  :: (Int -> t -> Either (a, t) b)
+  -> t
+  -> (Stack a, b)
+unprefixEither from = go (0 :: Int) Nil
+  where go i bs t = case from i t of
+          Left (b, t) -> go (succ i) (bs :> b) t
+          Right b     -> (bs, b)
