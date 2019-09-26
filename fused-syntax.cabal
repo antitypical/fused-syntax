@@ -41,6 +41,7 @@ library
     Data.Syntax.Algebra
     Data.Syntax.Functor
     Data.Syntax.Scope
+    Data.Syntax.Stack
     Data.Syntax.Sum
   -- other-modules:
   -- other-extensions:
