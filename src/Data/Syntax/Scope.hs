@@ -21,6 +21,7 @@ module Data.Syntax.Scope
 , ScopeT(..)
 , unScopeT
 , fromScopeT
+, toScopeT
   -- * Prefixes
 , unprefix
 , unprefixEither
@@ -152,6 +153,9 @@ unScopeT (ScopeT s) = s
 
 fromScopeT :: (RightModule t, Monad f) => ScopeT a t f b -> t f (Var a b)
 fromScopeT = unScopeT >=>* sequenceA
+
+toScopeT :: (Functor (t f), Applicative f) => t f (Var a b) -> ScopeT a t f b
+toScopeT = ScopeT . fmap (fmap pure)
 
 
 -- | Unwrap a (possibly-empty) prefix of @a@s wrapping a @t@ using a helper function.
