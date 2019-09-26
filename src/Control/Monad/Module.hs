@@ -1,5 +1,6 @@
 module Control.Monad.Module
-( RightModule(..)
+( -- * Right modules
+  RightModule(..)
 , (>=>*)
 , (<=<*)
 , joinr
