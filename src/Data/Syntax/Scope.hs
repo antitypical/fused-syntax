@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveTraversable, LambdaCase, QuantifiedConstraints, StandaloneDeriving #-}
+{-# LANGUAGE DeriveGeneric, DeriveTraversable, LambdaCase, QuantifiedConstraints, StandaloneDeriving #-}
 module Data.Syntax.Scope
 ( -- * Variables
   Var(..)
@@ -31,11 +31,12 @@ import Data.Bitraversable
 import Data.Function (on)
 import Data.Syntax.Functor
 import Data.Syntax.Stack
+import GHC.Generics (Generic, Generic1)
 
 data Var a b
   = B a
   | F b
-  deriving (Eq, Foldable, Functor, Ord, Show, Traversable)
+  deriving (Eq, Foldable, Functor, Generic, Generic1, Ord, Show, Traversable)
 
 instance Bifoldable Var where
   bifoldMap f g = \case
