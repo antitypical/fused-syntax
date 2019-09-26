@@ -63,3 +63,9 @@ instance {-# OVERLAPPABLE #-}
     reassoc (L (L l)) = L l
     reassoc (L (R l)) = R (L l)
     reassoc (R r)     = R (R r)
+
+instance {-# OVERLAPPABLE #-}
+         Project t r
+      => Project t (l :+: r) where
+  prj (R r) = prj r
+  prj _     = Nothing
