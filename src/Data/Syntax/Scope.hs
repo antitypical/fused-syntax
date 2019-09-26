@@ -22,6 +22,7 @@ module Data.Syntax.Scope
 , unScopeT
 , fromScopeT
 , toScopeT
+, abstractTEither
   -- * Prefixes
 , unprefix
 , unprefixEither
@@ -182,6 +183,10 @@ fromScopeT = unScopeT >=>* sequenceA
 
 toScopeT :: (Functor (t f), Applicative f) => t f (Var a b) -> ScopeT a t f b
 toScopeT = ScopeT . fmap (fmap pure)
+
+
+abstractTEither :: (Functor (t f), Applicative f) => (b -> Either a c) -> t f b -> ScopeT a t f c
+abstractTEither f = ScopeT . fmap (matchEither f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
 
 
 -- | Unwrap a (possibly-empty) prefix of @a@s wrapping a @t@ using a helper function.
