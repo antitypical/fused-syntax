@@ -22,3 +22,6 @@ class Inject t u where
 
 instance {-# OVERLAPPABLE #-} Inject t t where
   inj = id
+
+instance {-# OVERLAPPABLE #-} Inject t (t :+: r) where
+  inj = L
