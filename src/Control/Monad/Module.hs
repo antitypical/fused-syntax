@@ -4,3 +4,4 @@ module Control.Monad.Module
 
 class RightModule f where
   (>>=*) :: Monad m => f m a -> (a -> m b) -> f m b
+  infixl 1 >>=*
