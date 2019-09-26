@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric, DeriveTraversable, MultiParamTypeClasses, PolyKinds, TypeOperators #-}
+{-# LANGUAGE DeriveGeneric, DeriveTraversable, FlexibleInstances, MultiParamTypeClasses, PolyKinds, TypeOperators #-}
 module Data.Syntax.Sum
 ( -- * Sum syntax
   (:+:)(..)
@@ -19,3 +19,6 @@ instance (HFunctor f, HFunctor g) => HFunctor (f :+: g)
 
 class Inject t u where
   inj :: t m a -> u m a
+
+instance {-# OVERLAPPABLE #-} Inject t t where
+  inj = id
