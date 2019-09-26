@@ -11,6 +11,7 @@ module Data.Syntax.Scope
 , abstract1
 , abstract
 , abstractEither
+, instantiate1
 , instantiate
 , instantiateEither
 ) where
@@ -114,6 +115,10 @@ abstract f = abstractEither (matchMaybe f)
 abstractEither :: Applicative f => (b -> Either a c) -> f b -> Scope a f c
 abstractEither f = Scope . fmap (matchEither f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
 
+
+-- | Substitute a term for the free variable in a given term, producing a closed term.
+instantiate1 :: Monad f => f b -> Scope a f b -> f b
+instantiate1 t = instantiate (const t)
 
 instantiate :: Monad f => (a -> f b) -> Scope a f b -> f b
 instantiate f = instantiateEither (either f pure)
