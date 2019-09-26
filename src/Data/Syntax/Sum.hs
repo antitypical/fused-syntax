@@ -55,3 +55,11 @@ instance {-# OVERLAPPABLE #-}
          Project t (t :+: r) where
   prj (L l) = Just l
   prj _     = Nothing
+
+instance {-# OVERLAPPABLE #-}
+         Project t (l1 :+: l2 :+: r)
+      => Project t ((l1 :+: l2) :+: r) where
+  prj = prj . reassoc where
+    reassoc (L (L l)) = L l
+    reassoc (L (R l)) = R (L l)
+    reassoc (R r)     = R (R r)
