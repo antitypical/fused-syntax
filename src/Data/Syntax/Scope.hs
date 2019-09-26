@@ -12,3 +12,7 @@ instance Applicative (Incr a) where
   pure = S
   Z a <*> _ = Z a
   S f <*> a = f <$> a
+
+instance Monad (Incr a) where
+  Z a >>= _ = Z a
+  S a >>= f = f a
