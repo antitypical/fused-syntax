@@ -7,10 +7,17 @@ module Data.Syntax.Scope
 , closed
 ) where
 
+import Data.Bifoldable
+
 data Incr a b
   = Z a
   | S b
   deriving (Eq, Foldable, Functor, Ord, Show, Traversable)
+
+instance Bifoldable Incr where
+  bifoldMap f g = \case
+    Z a -> f a
+    S a -> g a
 
 instance Applicative (Incr a) where
   pure = S
