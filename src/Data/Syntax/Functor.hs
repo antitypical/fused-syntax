@@ -12,7 +12,7 @@ import GHC.Generics
 class HFunctor h where
   -- | Higher-order functor map of a natural transformation over higher-order positions within the syntax.
   --
-  -- A definition for 'hmap' over first-order syntax can be derived automatically provided a 'Generic1' instance is available.
+  -- A definition for 'hmap' can be derived automatically for a wide variety of datatypes provided a 'Generic1' instance is available.
   hmap :: Functor m => (forall x . m x -> n x) -> (h m a -> h n a)
   default hmap
     :: ( Functor m
