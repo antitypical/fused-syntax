@@ -8,6 +8,7 @@ module Data.Syntax.Scope
 ) where
 
 import Data.Bifoldable
+import Data.Bifunctor
 
 data Incr a b
   = Z a
@@ -18,6 +19,11 @@ instance Bifoldable Incr where
   bifoldMap f g = \case
     Z a -> f a
     S a -> g a
+
+instance Bifunctor Incr where
+  bimap f g = \case
+    Z a -> Z (f a)
+    S a -> S (g a)
 
 instance Applicative (Incr a) where
   pure = S
