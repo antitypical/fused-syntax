@@ -66,3 +66,6 @@ instance HFunctor (Scope a) where
 instance Applicative f => Applicative (Scope a f) where
   pure = Scope . pure . S . pure
   Scope f <*> Scope a = Scope (liftA2 (liftA2 (<*>)) f a)
+
+instance Monad f => Monad (Scope a f) where
+  Scope e >>= f = Scope (e >>= incr (pure . Z) (>>= unScope . f))
