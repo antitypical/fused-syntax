@@ -8,6 +8,7 @@ module Data.Syntax.Scope
 , Scope(..)
 ) where
 
+import Control.Applicative (liftA2)
 import Data.Bifoldable
 import Data.Bifunctor
 import Data.Bitraversable
@@ -61,3 +62,7 @@ newtype Scope a f b = Scope { unScope :: f (Incr a (f b)) }
 
 instance HFunctor (Scope a) where
   hmap f = Scope . f . fmap (fmap f) . unScope
+
+instance Applicative f => Applicative (Scope a f) where
+  pure = Scope . pure . S . pure
+  Scope f <*> Scope a = Scope (liftA2 (liftA2 (<*>)) f a)
