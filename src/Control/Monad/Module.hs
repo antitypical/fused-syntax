@@ -7,6 +7,7 @@ module Control.Monad.Module
   -- * Left modules
 , LeftModule(..)
 , (*>=>)
+, (*<=<)
 ) where
 
 -- | Modules over monads allow lifting of a monad’s product (i.e. 'Control.Monad.join') into another structure composed with the monad. A right-module @f m@ over a monad @m@ therefore allows one to extend @m@’s '>>=' operation to values of @f m@ using the '>>=*' operator.
@@ -55,3 +56,8 @@ class LeftModule f where
 f *>=> g = \x -> f x *>>= g
 
 infixl 1 *>=>
+
+(*<=<) :: (LeftModule f, Monad m) => (b -> f m c) -> (a -> m b) -> (a -> f m c)
+g *<=< f = \x -> f x *>>= g
+
+infixl 1 *<=<
