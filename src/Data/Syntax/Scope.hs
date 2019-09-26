@@ -2,6 +2,7 @@
 module Data.Syntax.Scope
 ( Incr(..)
 , matchEither
+, matchMaybe
 ) where
 
 data Incr a b
@@ -20,3 +21,6 @@ instance Monad (Incr a) where
 
 matchEither :: Applicative f => (b -> Either a c) -> b -> Incr a (f c)
 matchEither f x = either Z (S . pure) (f x)
+
+matchMaybe :: (b -> Maybe a) -> (b -> Either a b)
+matchMaybe f a = maybe (Right a) Left (f a)
