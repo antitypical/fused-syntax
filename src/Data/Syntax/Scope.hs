@@ -157,6 +157,9 @@ instance (Applicative (t f), Applicative f) => Applicative (ScopeT a t f) where
 instance (Monad (t f), MonadTrans t, Monad f) => Monad (ScopeT a t f) where
   ScopeT e >>= f = ScopeT (e >>= unVar (pure . B) ((>>= unScopeT . f) . lift))
 
+instance (forall g . Functor g => Functor (t g)) => RightModule (ScopeT b t) where
+  ScopeT s >>=* k = ScopeT (fmap (>>= k) <$> s)
+
 
 fromScopeT :: (RightModule t, Monad f) => ScopeT a t f b -> t f (Var a b)
 fromScopeT = unScopeT >=>* sequenceA
