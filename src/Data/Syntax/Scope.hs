@@ -11,6 +11,7 @@ module Data.Syntax.Scope
 import Data.Bifoldable
 import Data.Bifunctor
 import Data.Bitraversable
+import Data.Syntax.Functor
 
 data Incr a b
   = Z a
@@ -57,3 +58,6 @@ closed = traverse (const Nothing)
 
 newtype Scope a f b = Scope { unScope :: f (Incr a (f b)) }
   deriving (Foldable, Functor, Traversable)
+
+instance HFunctor (Scope a) where
+  hmap f = Scope . f . fmap (fmap f) . unScope
