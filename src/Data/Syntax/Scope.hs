@@ -157,6 +157,9 @@ instance (RightModule t, Monad f, Ord a, Ord b, forall a . Eq  a => Eq  (t f a)
                                               , forall a . Ord a => Ord (t f a)) => Ord (ScopeT a t f b) where
   compare = compare `on` fromScopeT
 
+deriving instance (Show a, Show b, forall a . Show a => Show (t f a)
+                                 , forall a . Show a => Show (f a)) => Show (ScopeT a t f b)
+
 instance (Applicative (t f), Applicative f) => Applicative (ScopeT a t f) where
   pure = ScopeT . pure . F . pure
   ScopeT f <*> ScopeT a = ScopeT (liftA2 (liftA2 (<*>)) f a)
