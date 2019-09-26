@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric, DeriveTraversable, FlexibleInstances, MultiParamTypeClasses, PolyKinds, TypeOperators #-}
+{-# LANGUAGE DeriveGeneric, DeriveTraversable, FlexibleContexts, FlexibleInstances, MultiParamTypeClasses, PolyKinds, TypeOperators #-}
 module Data.Syntax.Sum
 ( -- * Sum syntax
   (:+:)(..)
@@ -29,6 +29,14 @@ instance {-# OVERLAPPABLE #-}
 instance {-# OVERLAPPABLE #-}
          Inject t (t :+: r) where
   inj = L
+
+instance {-# OVERLAPPABLE #-}
+         Inject t (l1 :+: l2 :+: r)
+      => Inject t ((l1 :+: l2) :+: r) where
+  inj = reassoc . inj where
+    reassoc (L l)     = L (L l)
+    reassoc (R (L l)) = L (R l)
+    reassoc (R (R r)) = R r
 
 instance {-# OVERLAPPABLE #-}
          Inject t r
