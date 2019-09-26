@@ -37,6 +37,7 @@ library
   import: common
   hs-source-dirs: src
   exposed-modules:
+    Control.Monad.Module
     Data.Syntax.Algebra
     Data.Syntax.Functor
     Data.Syntax.Scope
