@@ -39,6 +39,7 @@ library
   exposed-modules:
     Data.Syntax.Algebra
     Data.Syntax.Functor
+    Data.Syntax.Scope
     Data.Syntax.Sum
   -- other-modules:
   -- other-extensions:
