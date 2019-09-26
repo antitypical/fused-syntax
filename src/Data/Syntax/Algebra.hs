@@ -1,2 +1,6 @@
+{-# LANGUAGE FunctionalDependencies #-}
 module Data.Syntax.Algebra
-() where
+( Algebra(..)
+) where
+
+class Algebra syntax carrier | carrier -> syntax where
