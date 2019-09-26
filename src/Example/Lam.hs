@@ -11,6 +11,9 @@ data Lam t a
   = Abs (Scope () t a)
   | t a :$ t a
 
+infixl 9 :$
+
+
 ($$) :: Has Lam sig t => t a -> t a -> t a
 f $$ a = term (f :$ a)
 
