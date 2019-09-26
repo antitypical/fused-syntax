@@ -17,6 +17,8 @@ module Data.Syntax.Scope
 , instantiate1
 , instantiate
 , instantiateEither
+  -- * Scope transformers
+, ScopeT(..)
   -- * Prefixes
 , unprefix
 , unprefixEither
@@ -136,6 +138,10 @@ instantiate f = instantiateEither (either f pure)
 
 instantiateEither :: Monad f => (Either a b -> f c) -> Scope a f b -> f c
 instantiateEither f = unScope >=> unVar (f . Left) (>>= f . Right)
+
+
+newtype ScopeT a t f b = ScopeT (t f (Var a (f b)))
+  deriving (Foldable, Functor, Generic, Generic1, Traversable)
 
 
 -- | Unwrap a (possibly-empty) prefix of @a@s wrapping a @t@ using a helper function.
