@@ -25,3 +25,8 @@ instance {-# OVERLAPPABLE #-} Inject t t where
 
 instance {-# OVERLAPPABLE #-} Inject t (t :+: r) where
   inj = L
+
+instance {-# OVERLAPPABLE #-}
+         Inject t r
+      => Inject t (l :+: r) where
+  inj = R . inj
