@@ -8,13 +8,14 @@ module Data.Syntax.Scope
 , Scope(..)
 , fromScope
 , toScope
+, abstract1
 , abstract
 , abstractEither
 ) where
 
 import Control.Applicative (liftA2)
 import Control.Monad.Module
-import Control.Monad ((>=>))
+import Control.Monad ((>=>), guard)
 import Control.Monad.Trans.Class
 import Data.Bifoldable
 import Data.Bifunctor
@@ -100,6 +101,10 @@ fromScope = unScope >=> sequenceA
 toScope :: Applicative f => f (Incr a b) -> Scope a f b
 toScope = Scope . fmap (fmap pure)
 
+
+-- | Bind occurrences of a variable in a term, producing a term in which the variable is bound.
+abstract1 :: (Applicative f, Eq a) => a -> f a -> Scope () f a
+abstract1 n = abstract (guard . (== n))
 
 abstract :: Applicative f => (b -> Maybe a) -> f b -> Scope a f b
 abstract f = abstractEither (matchMaybe f)
