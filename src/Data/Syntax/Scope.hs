@@ -77,7 +77,7 @@ closed = traverse (const Nothing)
 
 
 newtype Scope a f b = Scope (f (Var a (f b)))
-  deriving (Foldable, Functor, Traversable)
+  deriving (Foldable, Functor, Generic, Generic1, Traversable)
 
 unScope :: Scope a f b -> f (Var a (f b))
 unScope (Scope s) = s
