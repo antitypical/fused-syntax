@@ -14,6 +14,8 @@ data (f :+: g) t a
   | R (g t a)
   deriving (Eq, Foldable, Functor, Generic, Generic1, Ord, Show, Traversable)
 
+infixr 4 :+:
+
 instance (HFunctor f, HFunctor g) => HFunctor (f :+: g)
 
 
