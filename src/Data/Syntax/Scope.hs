@@ -160,6 +160,9 @@ instance (Monad (t f), MonadTrans t, Monad f) => Monad (ScopeT a t f) where
 instance (forall g . Functor g => Functor (t g)) => RightModule (ScopeT b t) where
   ScopeT s >>=* k = ScopeT (fmap (>>= k) <$> s)
 
+instance MonadTrans f => MonadTrans (ScopeT a f) where
+  lift = ScopeT . lift . pure . F
+
 
 fromScopeT :: (RightModule t, Monad f) => ScopeT a t f b -> t f (Var a b)
 fromScopeT = unScopeT >=>* sequenceA
