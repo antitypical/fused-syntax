@@ -14,6 +14,7 @@ module Data.Syntax.Scope
 , instantiate1
 , instantiate
 , instantiateEither
+, unprefix
 , unprefixEither
 ) where
 
@@ -128,6 +129,12 @@ instantiate f = instantiateEither (either f pure)
 instantiateEither :: Monad f => (Either a b -> f c) -> Scope a f b -> f c
 instantiateEither f = unScope >=> incr (f . Left) (>>= f . Right)
 
+
+unprefix
+  :: (Int -> t -> Maybe (a, t))
+  -> t
+  -> (Stack a, t)
+unprefix from = unprefixEither (matchMaybe . from)
 
 unprefixEither
   :: (Int -> t -> Either (a, t) b)
