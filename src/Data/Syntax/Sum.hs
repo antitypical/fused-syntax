@@ -50,3 +50,8 @@ class Project t u where
 instance {-# OVERLAPPABLE #-}
          Project t t where
   prj = Just
+
+instance {-# OVERLAPPABLE #-}
+         Project t (t :+: r) where
+  prj (L l) = Just l
+  prj _     = Nothing
