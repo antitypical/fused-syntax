@@ -19,6 +19,7 @@ module Data.Syntax.Scope
 , instantiateEither
   -- * Scope transformers
 , ScopeT(..)
+, unScopeT
   -- * Prefixes
 , unprefix
 , unprefixEither
@@ -143,6 +144,9 @@ instantiateEither f = unScope >=> unVar (f . Left) (>>= f . Right)
 -- | Like 'Scope', but allows the inner functor to vary. Useful for syntax like declaration scopes, case alternatives, etc., which can bind variables, but cannot (directly) consist solely of them.
 newtype ScopeT a t f b = ScopeT (t f (Var a (f b)))
   deriving (Foldable, Functor, Generic, Generic1, Traversable)
+
+unScopeT :: ScopeT a t f b -> t f (Var a (f b))
+unScopeT (ScopeT s) = s
 
 
 -- | Unwrap a (possibly-empty) prefix of @a@s wrapping a @t@ using a helper function.
