@@ -22,6 +22,7 @@ module Data.Syntax.Scope
 , unScopeT
 , fromScopeT
 , toScopeT
+, abstract1T
 , abstractT
 , abstractTEither
   -- * Prefixes
@@ -185,6 +186,10 @@ fromScopeT = unScopeT >=>* sequenceA
 toScopeT :: (Functor (t f), Applicative f) => t f (Var a b) -> ScopeT a t f b
 toScopeT = ScopeT . fmap (fmap pure)
 
+
+-- | Bind occurrences of a variable in a term, producing a term in which the variable is bound.
+abstract1T :: (Functor (t f), Applicative f, Eq a) => a -> t f a -> ScopeT () t f a
+abstract1T n = abstractT (guard . (== n))
 
 abstractT :: (Functor (t f), Applicative f) => (b -> Maybe a) -> t f b -> ScopeT a t f b
 abstractT f = abstractTEither (matchMaybe f)
