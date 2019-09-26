@@ -5,6 +5,7 @@ module Data.Syntax.Scope
 , matchEither
 , matchMaybe
 , closed
+, Scope(..)
 ) where
 
 import Data.Bifoldable
@@ -52,3 +53,7 @@ matchMaybe f a = maybe (Right a) Left (f a)
 
 closed :: Traversable f => f a -> Maybe (f b)
 closed = traverse (const Nothing)
+
+
+newtype Scope a f b = Scope { unScope :: f (Incr a (f b)) }
+  deriving (Foldable, Functor, Traversable)
