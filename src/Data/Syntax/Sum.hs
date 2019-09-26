@@ -2,6 +2,7 @@
 module Data.Syntax.Sum
 ( -- * Sum syntax
   (:+:)(..)
+, unSum
   -- * Membership
 , Inject(..)
 , Project(..)
@@ -18,6 +19,10 @@ data (f :+: g) t a
 infixr 4 :+:
 
 instance (HFunctor f, HFunctor g) => HFunctor (f :+: g)
+
+unSum :: (f t a -> b) -> (g t a -> b) -> (f :+: g) t a -> b
+unSum f _ (L l) = f l
+unSum _ g (R r) = g r
 
 
 class Inject t u where
