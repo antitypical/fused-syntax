@@ -9,3 +9,7 @@ data Stack a
   deriving (Eq, Foldable, Functor, Ord, Show, Traversable)
 
 infixl 4 :>
+
+instance Semigroup (Stack a) where
+  xs <> Nil       = xs
+  xs <> (ys :> y) = (xs <> ys) :> y
