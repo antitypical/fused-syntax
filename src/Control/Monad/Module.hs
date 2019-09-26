@@ -11,6 +11,8 @@ module Control.Monad.Module
 , joinl
 ) where
 
+import Data.Syntax.Functor
+
 -- | Modules over monads allow lifting of a monad’s product (i.e. 'Control.Monad.join') into another structure composed with the monad. A right-module @f m@ over a monad @m@ therefore allows one to extend @m@’s '>>=' operation to values of @f m@ using the '>>=*' operator.
 --
 --   In practical terms, this means that we can describe syntax which cannot itself bind or be substituted for variables, but which can be substituted inside when containing a substitutable expression monad. For example, we might not want to allow variables in a declaration context, but might still want to be able to substitute for e.g. globally-bound variables inside declarations; a 'RightModule' instance expresses this relationship nicely.
@@ -30,7 +32,7 @@ module Control.Monad.Module
 -- @
 -- m >>=* (k >=> h) = (m >>=* k) >>=* h
 -- @
-class RightModule f where
+class HFunctor f => RightModule f where
   (>>=*) :: Monad m => f m a -> (a -> m b) -> f m b
   infixl 1 >>=*
 
@@ -49,7 +51,7 @@ joinr :: (RightModule f, Monad m) => f m (m a) -> f m a
 joinr = (>>=* id)
 
 
-class LeftModule f where
+class HFunctor f => LeftModule f where
   (*>>=) :: Monad m => m a -> (a -> f m b) -> f m b
   infixl 1 *>>=
 
