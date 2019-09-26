@@ -25,6 +25,7 @@ module Data.Syntax.Scope
 , abstract1T
 , abstractT
 , abstractTEither
+, instantiateT
 , instantiateTEither
   -- * Prefixes
 , unprefix
@@ -198,6 +199,9 @@ abstractT f = abstractTEither (matchMaybe f)
 abstractTEither :: (Functor (t f), Applicative f) => (b -> Either a c) -> t f b -> ScopeT a t f c
 abstractTEither f = ScopeT . fmap (matchEither f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
 
+
+instantiateT :: (RightModule t, Monad f) => (a -> f b) -> ScopeT a t f b -> t f b
+instantiateT f = instantiateTEither (either f pure)
 
 instantiateTEither :: (RightModule t, Monad f) => (Either a b -> f c) -> ScopeT a t f b -> t f c
 instantiateTEither f = unScopeT >=>* unVar (f . Left) (>>= f . Right)
