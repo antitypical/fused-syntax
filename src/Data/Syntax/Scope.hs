@@ -4,6 +4,7 @@ module Data.Syntax.Scope
 , incr
 , matchEither
 , matchMaybe
+, closed
 ) where
 
 data Incr a b
@@ -28,3 +29,7 @@ matchEither f x = either Z (S . pure) (f x)
 
 matchMaybe :: (b -> Maybe a) -> (b -> Either a b)
 matchMaybe f a = maybe (Right a) Left (f a)
+
+
+closed :: Traversable f => f a -> Maybe (f b)
+closed = traverse (const Nothing)
