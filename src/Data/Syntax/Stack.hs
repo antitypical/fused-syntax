@@ -13,3 +13,6 @@ infixl 4 :>
 instance Semigroup (Stack a) where
   xs <> Nil       = xs
   xs <> (ys :> y) = (xs <> ys) :> y
+
+instance Monoid (Stack a) where
+  mempty = Nil
