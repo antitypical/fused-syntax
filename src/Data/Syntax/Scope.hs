@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveTraversable, LambdaCase, QuantifiedConstraints #-}
+{-# LANGUAGE DeriveTraversable, LambdaCase, QuantifiedConstraints, StandaloneDeriving #-}
 module Data.Syntax.Scope
 ( Incr(..)
 , incr
@@ -75,6 +75,8 @@ instance (Eq   a, Eq   b, forall a . Eq   a => Eq   (f a), Monad f) => Eq   (Sco
 instance (Ord  a, Ord  b, forall a . Eq   a => Eq   (f a)
                         , forall a . Ord  a => Ord  (f a), Monad f) => Ord  (Scope a f b) where
   compare = compare `on` fromScope
+
+deriving instance (Show a, Show b, forall a . Show a => Show (f a)) => Show (Scope a f b)
 
 instance Applicative f => Applicative (Scope a f) where
   pure = Scope . pure . S . pure
