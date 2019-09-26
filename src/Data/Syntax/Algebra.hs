@@ -2,6 +2,7 @@
 module Data.Syntax.Algebra
 ( Algebra(..)
 , Has
+, term
 ) where
 
 import Data.Syntax.Functor
@@ -13,3 +14,6 @@ class HFunctor syntax => Algebra syntax carrier | carrier -> syntax where
 
 
 type Has syn sig t = (Inject syn sig, Algebra sig t)
+
+term :: Has syn sig t => syn t a -> t a
+term = alg . inj
