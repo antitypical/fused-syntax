@@ -9,6 +9,7 @@ module Data.Syntax.Scope
 
 import Data.Bifoldable
 import Data.Bifunctor
+import Data.Bitraversable
 
 data Incr a b
   = Z a
@@ -24,6 +25,11 @@ instance Bifunctor Incr where
   bimap f g = \case
     Z a -> Z (f a)
     S a -> S (g a)
+
+instance Bitraversable Incr where
+  bitraverse f g = \case
+    Z a -> Z <$> f a
+    S a -> S <$> g a
 
 instance Applicative (Incr a) where
   pure = S
