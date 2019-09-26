@@ -4,3 +4,4 @@ module Data.Syntax.Algebra
 ) where
 
 class Algebra syntax carrier | carrier -> syntax where
+  gen :: a -> carrier a
