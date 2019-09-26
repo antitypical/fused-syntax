@@ -6,10 +6,12 @@ module Data.Syntax.Scope
 , matchMaybe
 , closed
 , Scope(..)
+, fromScope
 ) where
 
 import Control.Applicative (liftA2)
 import Control.Monad.Module
+import Control.Monad ((>=>))
 import Data.Bifoldable
 import Data.Bifunctor
 import Data.Bitraversable
@@ -73,3 +75,7 @@ instance Monad f => Monad (Scope a f) where
 
 instance RightModule (Scope a) where
   Scope m >>=* f = Scope (fmap (>>= f) <$> m)
+
+
+fromScope :: Monad f => Scope a f b -> f (Incr a b)
+fromScope = unScope >=> sequenceA
