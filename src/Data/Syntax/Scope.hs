@@ -8,6 +8,7 @@ module Data.Syntax.Scope
 , Scope(..)
 , fromScope
 , toScope
+, abstractEither
 ) where
 
 import Control.Applicative (liftA2)
@@ -97,3 +98,7 @@ fromScope = unScope >=> sequenceA
 
 toScope :: Applicative f => f (Incr a b) -> Scope a f b
 toScope = Scope . fmap (fmap pure)
+
+
+abstractEither :: Applicative f => (b -> Either a c) -> f b -> Scope a f c
+abstractEither f = Scope . fmap (matchEither f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
