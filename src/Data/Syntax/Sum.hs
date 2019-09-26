@@ -46,3 +46,7 @@ instance {-# OVERLAPPABLE #-}
 
 class Project t u where
   prj :: u m a -> Maybe (t m a)
+
+instance {-# OVERLAPPABLE #-}
+         Project t t where
+  prj = Just
