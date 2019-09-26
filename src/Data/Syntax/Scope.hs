@@ -11,6 +11,7 @@ module Data.Syntax.Scope
 , abstract1
 , abstract
 , abstractEither
+, instantiateEither
 ) where
 
 import Control.Applicative (liftA2)
@@ -111,3 +112,7 @@ abstract f = abstractEither (matchMaybe f)
 
 abstractEither :: Applicative f => (b -> Either a c) -> f b -> Scope a f c
 abstractEither f = Scope . fmap (matchEither f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
+
+
+instantiateEither :: Monad f => (Either a b -> f c) -> Scope a f b -> f c
+instantiateEither f = unScope >=> incr (f . Left) (>>= f . Right)
