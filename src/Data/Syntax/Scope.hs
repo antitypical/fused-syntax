@@ -1,10 +1,12 @@
 {-# LANGUAGE DeriveTraversable, LambdaCase, QuantifiedConstraints, StandaloneDeriving #-}
 module Data.Syntax.Scope
-( Var(..)
+( -- * Variables
+  Var(..)
 , unVar
 , matchEither
 , matchMaybe
 , closed
+  -- * Scopes
 , Scope(..)
 , fromScope
 , toScope
@@ -14,6 +16,7 @@ module Data.Syntax.Scope
 , instantiate1
 , instantiate
 , instantiateEither
+  -- * Prefixes
 , unprefix
 , unprefixEither
 ) where
