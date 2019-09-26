@@ -12,6 +12,7 @@ module Data.Syntax.Scope
 import Control.Applicative (liftA2)
 import Control.Monad.Module
 import Control.Monad ((>=>))
+import Control.Monad.Trans.Class
 import Data.Bifoldable
 import Data.Bifunctor
 import Data.Bitraversable
@@ -72,6 +73,9 @@ instance Applicative f => Applicative (Scope a f) where
 
 instance Monad f => Monad (Scope a f) where
   Scope e >>= f = Scope (e >>= incr (pure . Z) (>>= unScope . f))
+
+instance MonadTrans (Scope a) where
+  lift = Scope . pure . S
 
 instance RightModule (Scope a) where
   Scope m >>=* f = Scope (fmap (>>= f) <$> m)
