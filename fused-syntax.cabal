@@ -9,7 +9,7 @@ synopsis:            Fast, flexible, fused syntax operations for Haskell
 -- description:
 homepage:            https://github.com/antitypical/fused-syntax
 bug-reports:         https://github.com/antitypical/fused-syntax/issues
-license:             MIT
+license:             BSD-3-Clause
 license-file:        LICENSE
 author:              Rob Rix
 maintainer:          rob.rix@me.com
