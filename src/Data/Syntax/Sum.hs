@@ -8,6 +8,7 @@ module Data.Syntax.Sum
 , Project(..)
 ) where
 
+import Control.Monad.Module
 import Data.Syntax.Functor
 import GHC.Generics (Generic, Generic1)
 
@@ -19,6 +20,11 @@ data (f :+: g) t a
 infixr 4 :+:
 
 instance (HFunctor f, HFunctor g) => HFunctor (f :+: g)
+
+instance (RightModule f, RightModule g) => RightModule (f :+: g) where
+  L l >>=* f = L (l >>=* f)
+  R r >>=* f = R (r >>=* f)
+
 
 unSum :: (f t a -> b) -> (g t a -> b) -> (f :+: g) t a -> b
 unSum f _ (L l) = f l
