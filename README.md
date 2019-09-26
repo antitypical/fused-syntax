@@ -1,2 +1,3 @@
-# fused-syntax
- Fast, flexible, fused syntax operations for Haskell
+# `fused-syntax`
+
+Fast, flexible, fused syntax operations for Haskell
