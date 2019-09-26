@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveTraversable, LambdaCase, QuantifiedConstraints, StandaloneDeriving #-}
 module Data.Syntax.Scope
 ( Var(..)
-, incr
+, unVar
 , matchEither
 , matchMaybe
 , closed
@@ -58,8 +58,8 @@ instance Monad (Var a) where
   Z a >>= _ = Z a
   S a >>= f = f a
 
-incr :: (a -> c) -> (b -> c) -> Var a b -> c
-incr z s = \case { Z a -> z a ; S b -> s b }
+unVar :: (a -> c) -> (b -> c) -> Var a b -> c
+unVar z s = \case { Z a -> z a ; S b -> s b }
 
 matchEither :: Applicative f => (b -> Either a c) -> b -> Var a (f c)
 matchEither f x = either Z (S . pure) (f x)
@@ -92,7 +92,7 @@ instance Applicative f => Applicative (Scope a f) where
   Scope f <*> Scope a = Scope (liftA2 (liftA2 (<*>)) f a)
 
 instance Monad f => Monad (Scope a f) where
-  Scope e >>= f = Scope (e >>= incr (pure . Z) (>>= unScope . f))
+  Scope e >>= f = Scope (e >>= unVar (pure . Z) (>>= unScope . f))
 
 instance MonadTrans (Scope a) where
   lift = Scope . pure . S
@@ -127,7 +127,7 @@ instantiate :: Monad f => (a -> f b) -> Scope a f b -> f b
 instantiate f = instantiateEither (either f pure)
 
 instantiateEither :: Monad f => (Either a b -> f c) -> Scope a f b -> f c
-instantiateEither f = unScope >=> incr (f . Left) (>>= f . Right)
+instantiateEither f = unScope >=> unVar (f . Left) (>>= f . Right)
 
 
 -- | Unwrap a (possibly-empty) prefix of @a@s wrapping a @t@ using a helper function.
