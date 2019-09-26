@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveTraversable, LambdaCase #-}
+{-# LANGUAGE DeriveTraversable, LambdaCase, QuantifiedConstraints #-}
 module Data.Syntax.Scope
 ( Incr(..)
 , incr
@@ -17,6 +17,7 @@ import Control.Monad.Trans.Class
 import Data.Bifoldable
 import Data.Bifunctor
 import Data.Bitraversable
+import Data.Function (on)
 import Data.Syntax.Functor
 
 data Incr a b
@@ -67,6 +68,9 @@ newtype Scope a f b = Scope { unScope :: f (Incr a (f b)) }
 
 instance HFunctor (Scope a) where
   hmap f = Scope . f . fmap (fmap f) . unScope
+
+instance (Eq   a, Eq   b, forall a . Eq   a => Eq   (f a), Monad f) => Eq   (Scope a f b) where
+  (==) = (==) `on` fromScope
 
 instance Applicative f => Applicative (Scope a f) where
   pure = Scope . pure . S . pure
