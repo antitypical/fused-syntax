@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveFoldable, DeriveFunctor, QuantifiedConstraints, StandaloneDeriving, UndecidableInstances #-}
+{-# LANGUAGE DeriveTraversable, QuantifiedConstraints, StandaloneDeriving, UndecidableInstances #-}
 module Data.Syntax.Term
 ( Term(..)
 ) where
@@ -12,6 +12,9 @@ data Term sig a
 
 deriving instance ( forall g . Foldable    g => Foldable    (sig g)) => Foldable    (Term sig)
 deriving instance ( forall g . Functor     g => Functor     (sig g)) => Functor     (Term sig)
+deriving instance ( forall g . Foldable    g => Foldable    (sig g)
+                  , forall g . Functor     g => Functor     (sig g)
+                  , forall g . Traversable g => Traversable (sig g)) => Traversable (Term sig)
 
 instance ( RightModule sig
          , forall f . Functor f => Functor (sig f)
