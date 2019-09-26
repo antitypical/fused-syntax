@@ -140,6 +140,7 @@ instantiateEither :: Monad f => (Either a b -> f c) -> Scope a f b -> f c
 instantiateEither f = unScope >=> unVar (f . Left) (>>= f . Right)
 
 
+-- | Like 'Scope', but allows the inner functor to vary. Useful for syntax like declaration scopes, case alternatives, etc., which can bind variables, but cannot (directly) consist solely of them.
 newtype ScopeT a t f b = ScopeT (t f (Var a (f b)))
   deriving (Foldable, Functor, Generic, Generic1, Traversable)
 
