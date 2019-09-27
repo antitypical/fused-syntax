@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveTraversable, FlexibleContexts, QuantifiedConstraints, StandaloneDeriving #-}
+{-# LANGUAGE DeriveGeneric, DeriveTraversable, FlexibleContexts, QuantifiedConstraints, StandaloneDeriving #-}
 module Example.Lam
 ( Lam(..)
 , lam
@@ -7,11 +7,12 @@ module Example.Lam
 
 import Data.Syntax.Algebra
 import Data.Syntax.Scope
+import GHC.Generics (Generic1)
 
 data Lam t a
   = Abs (Scope () t a)
   | t a :$ t a
-  deriving (Foldable, Functor, Traversable)
+  deriving (Foldable, Functor, Generic1, Traversable)
 
 infixl 9 :$
 
