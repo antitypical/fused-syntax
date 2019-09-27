@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE DeriveTraversable, FlexibleContexts #-}
 module Example.Lam
 ( Lam(..)
 , lam
@@ -11,6 +11,7 @@ import Data.Syntax.Scope
 data Lam t a
   = Abs (Scope () t a)
   | t a :$ t a
+  deriving (Foldable, Functor, Traversable)
 
 infixl 9 :$
 
