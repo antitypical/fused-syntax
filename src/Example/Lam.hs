@@ -6,6 +6,7 @@ module Example.Lam
 ) where
 
 import Data.Syntax.Algebra
+import Data.Syntax.Functor
 import Data.Syntax.Scope
 import GHC.Generics (Generic1)
 
@@ -20,6 +21,8 @@ deriving instance (Eq   a, forall a . Eq   a => Eq   (f a), Monad f) => Eq   (La
 deriving instance (Ord  a, forall a . Eq   a => Eq   (f a)
                          , forall a . Ord  a => Ord  (f a), Monad f) => Ord  (Lam f a)
 deriving instance (Show a, forall a . Show a => Show (f a))          => Show (Lam f a)
+
+instance HFunctor Lam
 
 
 lam :: (Eq a, Has Lam sig t) => a -> t a -> t a
