@@ -5,6 +5,7 @@ module Example.Lam
 , ($$)
 ) where
 
+import Control.Monad.Module
 import Data.Syntax.Algebra
 import Data.Syntax.Functor
 import Data.Syntax.Scope
@@ -23,6 +24,10 @@ deriving instance (Ord  a, forall a . Eq   a => Eq   (f a)
 deriving instance (Show a, forall a . Show a => Show (f a))          => Show (Lam f a)
 
 instance HFunctor Lam
+
+instance RightModule Lam where
+  Abs b  >>=* f = Abs (b >>=* f)
+  g :$ a >>=* f = (g >>= f) :$ (a >>= f)
 
 
 lam :: (Eq a, Has Lam sig t) => a -> t a -> t a
