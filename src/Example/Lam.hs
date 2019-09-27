@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveTraversable, FlexibleContexts #-}
+{-# LANGUAGE DeriveTraversable, FlexibleContexts, QuantifiedConstraints, StandaloneDeriving #-}
 module Example.Lam
 ( Lam(..)
 , lam
@@ -14,6 +14,11 @@ data Lam t a
   deriving (Foldable, Functor, Traversable)
 
 infixl 9 :$
+
+deriving instance (Eq   a, forall a . Eq   a => Eq   (f a), Monad f) => Eq   (Lam f a)
+deriving instance (Ord  a, forall a . Eq   a => Eq   (f a)
+                         , forall a . Ord  a => Ord  (f a), Monad f) => Ord  (Lam f a)
+deriving instance (Show a, forall a . Show a => Show (f a))          => Show (Lam f a)
 
 
 lam :: (Eq a, Has Lam sig t) => a -> t a -> t a
