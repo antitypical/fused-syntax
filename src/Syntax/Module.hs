@@ -1,4 +1,4 @@
-module Control.Monad.Module
+module Syntax.Module
 ( -- * Right modules
   RightModule(..)
 , (>=>*)

@@ -5,10 +5,10 @@ module Example.Lam
 , ($$)
 ) where
 
-import Control.Monad.Module
 import GHC.Generics (Generic1)
 import Syntax.Algebra
 import Syntax.Functor
+import Syntax.Module
 import Syntax.Scope
 
 data Lam t a

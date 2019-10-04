@@ -8,9 +8,9 @@ module Syntax.Sum
 , Project(..)
 ) where
 
-import Control.Monad.Module
 import GHC.Generics (Generic, Generic1)
 import Syntax.Functor
+import Syntax.Module
 
 data (f :+: g) t a
   = L (f t a)

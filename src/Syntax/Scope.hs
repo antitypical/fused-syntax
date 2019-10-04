@@ -14,13 +14,13 @@ module Syntax.Scope
 ) where
 
 import Control.Applicative (liftA2)
-import Control.Monad.Module
 import Control.Monad ((>=>), guard)
 import Control.Monad.Trans.Class
 import Data.Function (on)
 import GHC.Generics (Generic, Generic1)
 import Syntax.Algebra
 import Syntax.Functor
+import Syntax.Module
 import Syntax.Var
 
 newtype Scope a f b = Scope (f (Var a (f b)))

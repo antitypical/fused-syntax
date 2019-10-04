@@ -8,9 +8,9 @@ module Syntax.Term
 
 import Control.Applicative (Alternative(..))
 import Control.Monad ((<=<), ap)
-import Control.Monad.Module
 import Syntax.Algebra
 import Syntax.Functor
+import Syntax.Module
 import Syntax.Sum
 
 data Term sig a
