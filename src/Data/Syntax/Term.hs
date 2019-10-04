@@ -2,8 +2,10 @@
 module Data.Syntax.Term
 ( Term(..)
 , hoistTerm
+, unTerm
 ) where
 
+import Control.Applicative (Alternative(..))
 import Control.Monad (ap)
 import Control.Monad.Module
 import Data.Syntax.Algebra
@@ -61,3 +63,8 @@ hoistTerm :: (HFunctor sig, forall g . Functor g => Functor (sig g)) => (forall 
 hoistTerm f = go
   where go (Var v)  = Var v
         go (Term t) = Term (f (hmap (hoistTerm f) t))
+
+
+unTerm :: Alternative m => Term sig a -> m (sig (Term sig) a)
+unTerm (Term t) = pure t
+unTerm _        = empty
