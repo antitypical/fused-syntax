@@ -19,7 +19,7 @@ import Control.Monad (guard)
 import Control.Monad.Trans.Class
 import Data.Function (on)
 import Data.Syntax.Functor
-import Data.Syntax.Scope
+import Data.Syntax.Var
 import GHC.Generics (Generic, Generic1)
 
 -- | Like 'Scope', but allows the inner functor to vary. Useful for syntax like declaration scopes, case alternatives, etc., which can bind variables, but cannot (directly) consist solely of them.
