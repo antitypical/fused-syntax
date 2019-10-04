@@ -41,10 +41,10 @@ library
     Data.Syntax.Algebra
     Data.Syntax.Functor
     Data.Syntax.Scope
-    Data.Syntax.Trans.Scope
     Data.Syntax.Stack
     Data.Syntax.Sum
     Data.Syntax.Term
+    Data.Syntax.Trans.Scope
   other-modules:
     Example.Lam
   build-depends:
