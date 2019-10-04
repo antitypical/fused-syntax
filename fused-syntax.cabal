@@ -41,12 +41,12 @@ library
     Data.Syntax.Algebra
     Data.Syntax.Functor
     Data.Syntax.Scope
+    Data.Syntax.Trans.Scope
     Data.Syntax.Stack
     Data.Syntax.Sum
     Data.Syntax.Term
   other-modules:
     Example.Lam
-  -- other-extensions:
   build-depends:
       base         ^>=4.12.0.0
     , transformers ^>= 0.5.6
