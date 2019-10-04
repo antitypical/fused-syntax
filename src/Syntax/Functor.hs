@@ -1,5 +1,5 @@
 {-# LANGUAGE DefaultSignatures, EmptyCase, FlexibleContexts, FlexibleInstances, MultiParamTypeClasses, RankNTypes, TypeOperators #-}
-module Data.Syntax.Functor
+module Syntax.Functor
 ( HFunctor(..)
 -- * Generic deriving of 'HFunctor' instances.
 , GHFunctor(..)

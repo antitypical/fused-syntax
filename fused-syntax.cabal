@@ -38,14 +38,14 @@ library
   hs-source-dirs: src
   exposed-modules:
     Control.Monad.Module
-    Data.Syntax.Algebra
-    Data.Syntax.Functor
-    Data.Syntax.Scope
-    Data.Syntax.Stack
-    Data.Syntax.Sum
-    Data.Syntax.Term
-    Data.Syntax.Trans.Scope
-    Data.Syntax.Var
+    Syntax.Algebra
+    Syntax.Functor
+    Syntax.Scope
+    Syntax.Stack
+    Syntax.Sum
+    Syntax.Term
+    Syntax.Trans.Scope
+    Syntax.Var
   other-modules:
     Example.Lam
   build-depends:

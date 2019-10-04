@@ -1,5 +1,5 @@
 {-# LANGUAGE DeriveGeneric, DeriveTraversable, LambdaCase #-}
-module Data.Syntax.Var
+module Syntax.Var
 ( -- * Variables
   Var(..)
 , unVar
@@ -11,8 +11,8 @@ module Data.Syntax.Var
 import Data.Bifoldable
 import Data.Bifunctor
 import Data.Bitraversable
-import Data.Syntax.Algebra
 import GHC.Generics (Generic, Generic1)
+import Syntax.Algebra
 
 data Var a b
   = B a

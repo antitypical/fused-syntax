@@ -1,5 +1,5 @@
 {-# LANGUAGE DeriveTraversable, FlexibleInstances, MultiParamTypeClasses, QuantifiedConstraints, RankNTypes, StandaloneDeriving, UndecidableInstances #-}
-module Data.Syntax.Term
+module Syntax.Term
 ( Term(..)
 , hoistTerm
 , unTerm
@@ -9,9 +9,9 @@ module Data.Syntax.Term
 import Control.Applicative (Alternative(..))
 import Control.Monad ((<=<), ap)
 import Control.Monad.Module
-import Data.Syntax.Algebra
-import Data.Syntax.Functor
-import Data.Syntax.Sum
+import Syntax.Algebra
+import Syntax.Functor
+import Syntax.Sum
 
 data Term sig a
   = Var a

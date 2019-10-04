@@ -1,12 +1,12 @@
 {-# LANGUAGE ConstraintKinds, FunctionalDependencies #-}
-module Data.Syntax.Algebra
+module Syntax.Algebra
 ( Algebra(..)
 , Has
 , term
 ) where
 
-import Data.Syntax.Functor
-import Data.Syntax.Sum
+import Syntax.Functor
+import Syntax.Sum
 
 class (HFunctor syntax, Functor carrier) => Algebra syntax carrier | carrier -> syntax where
   gen :: a -> carrier a

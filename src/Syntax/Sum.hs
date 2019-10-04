@@ -1,5 +1,5 @@
 {-# LANGUAGE DeriveGeneric, DeriveTraversable, FlexibleContexts, FlexibleInstances, MultiParamTypeClasses, PolyKinds, TypeOperators #-}
-module Data.Syntax.Sum
+module Syntax.Sum
 ( -- * Sum syntax
   (:+:)(..)
 , unSum
@@ -9,8 +9,8 @@ module Data.Syntax.Sum
 ) where
 
 import Control.Monad.Module
-import Data.Syntax.Functor
 import GHC.Generics (Generic, Generic1)
+import Syntax.Functor
 
 data (f :+: g) t a
   = L (f t a)

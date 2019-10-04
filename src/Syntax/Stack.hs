@@ -1,5 +1,5 @@
 {-# LANGUAGE DeriveTraversable #-}
-module Data.Syntax.Stack
+module Syntax.Stack
 ( -- * Stacks
   Stack(..)
   -- * Prefixes
@@ -7,7 +7,7 @@ module Data.Syntax.Stack
 , unprefixEither
 ) where
 
-import Data.Syntax.Var (matchMaybe)
+import Syntax.Var (matchMaybe)
 
 data Stack a
   = Nil

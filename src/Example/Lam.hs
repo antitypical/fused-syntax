@@ -6,10 +6,10 @@ module Example.Lam
 ) where
 
 import Control.Monad.Module
-import Data.Syntax.Algebra
-import Data.Syntax.Functor
-import Data.Syntax.Scope
 import GHC.Generics (Generic1)
+import Syntax.Algebra
+import Syntax.Functor
+import Syntax.Scope
 
 data Lam t a
   = Abs (Scope () t a)

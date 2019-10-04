@@ -1,5 +1,5 @@
 {-# LANGUAGE DeriveGeneric, DeriveTraversable, LambdaCase, QuantifiedConstraints, StandaloneDeriving #-}
-module Data.Syntax.Scope
+module Syntax.Scope
 ( -- * Scopes
   Scope(..)
 , unScope
@@ -18,10 +18,10 @@ import Control.Monad.Module
 import Control.Monad ((>=>), guard)
 import Control.Monad.Trans.Class
 import Data.Function (on)
-import Data.Syntax.Algebra
-import Data.Syntax.Functor
-import Data.Syntax.Var
 import GHC.Generics (Generic, Generic1)
+import Syntax.Algebra
+import Syntax.Functor
+import Syntax.Var
 
 newtype Scope a f b = Scope (f (Var a (f b)))
   deriving (Foldable, Functor, Generic, Generic1, Traversable)
