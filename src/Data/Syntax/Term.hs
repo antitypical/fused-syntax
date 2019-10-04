@@ -58,6 +58,7 @@ instance ( RightModule sig
          , forall f . Functor f => Functor (sig f)
          )
       => Algebra sig (Term sig) where
+  gen = Var
   alg = Term
 
 
