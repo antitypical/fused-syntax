@@ -8,7 +8,7 @@ module Data.Syntax.Algebra
 import Data.Syntax.Functor
 import Data.Syntax.Sum
 
-class (HFunctor syntax, Applicative carrier) => Algebra syntax carrier | carrier -> syntax where
+class (HFunctor syntax, Functor carrier) => Algebra syntax carrier | carrier -> syntax where
   gen :: a -> carrier a
   alg :: syntax carrier a -> carrier a
 
