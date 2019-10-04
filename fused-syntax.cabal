@@ -45,6 +45,7 @@ library
     Data.Syntax.Sum
     Data.Syntax.Term
     Data.Syntax.Trans.Scope
+    Data.Syntax.Var
   other-modules:
     Example.Lam
   build-depends:
