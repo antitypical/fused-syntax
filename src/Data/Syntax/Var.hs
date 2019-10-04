@@ -11,6 +11,7 @@ module Data.Syntax.Var
 import Data.Bifoldable
 import Data.Bifunctor
 import Data.Bitraversable
+import Data.Syntax.Algebra
 import GHC.Generics (Generic, Generic1)
 
 data Var a b
@@ -45,8 +46,8 @@ instance Monad (Var a) where
 unVar :: (a -> c) -> (b -> c) -> Var a b -> c
 unVar z s = \case { B a -> z a ; F b -> s b }
 
-matchEither :: Applicative f => (b -> Either a c) -> b -> Var a (f c)
-matchEither f x = either B (F . pure) (f x)
+matchEither :: Algebra sig f => (b -> Either a c) -> b -> Var a (f c)
+matchEither f x = either B (F . gen) (f x)
 
 matchMaybe :: (b -> Maybe a) -> (b -> Either a b)
 matchMaybe f a = maybe (Right a) Left (f a)

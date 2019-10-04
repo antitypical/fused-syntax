@@ -18,6 +18,7 @@ import Control.Monad.Module
 import Control.Monad (guard)
 import Control.Monad.Trans.Class
 import Data.Function (on)
+import Data.Syntax.Algebra
 import Data.Syntax.Functor
 import Data.Syntax.Var
 import GHC.Generics (Generic, Generic1)
@@ -64,13 +65,13 @@ toScopeT = ScopeT . fmap (fmap pure)
 
 
 -- | Bind occurrences of a variable in a term, producing a term in which the variable is bound.
-abstract1T :: (Functor (t f), Applicative f, Eq a) => a -> t f a -> ScopeT () t f a
+abstract1T :: (Functor (t f), Algebra sig f, Eq a) => a -> t f a -> ScopeT () t f a
 abstract1T n = abstractT (guard . (== n))
 
-abstractT :: (Functor (t f), Applicative f) => (b -> Maybe a) -> t f b -> ScopeT a t f b
+abstractT :: (Functor (t f), Algebra sig f) => (b -> Maybe a) -> t f b -> ScopeT a t f b
 abstractT f = abstractTEither (matchMaybe f)
 
-abstractTEither :: (Functor (t f), Applicative f) => (b -> Either a c) -> t f b -> ScopeT a t f c
+abstractTEither :: (Functor (t f), Algebra sig f) => (b -> Either a c) -> t f b -> ScopeT a t f c
 abstractTEither f = ScopeT . fmap (matchEither f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
 
 
