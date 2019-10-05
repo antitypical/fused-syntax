@@ -1,6 +1,7 @@
 module Syntax.Module
 ( -- * Right modules
   RightModule(..)
+, (=<<*)
 , (>=>*)
 , (<=<*)
 , joinr
@@ -35,6 +36,11 @@ import Syntax.Functor
 class HFunctor f => RightModule f where
   (>>=*) :: Monad m => f m a -> (a -> m b) -> f m b
   infixl 1 >>=*
+
+(=<<*) :: (Monad m, RightModule f) => (a -> m b) -> f m a -> f m b
+(=<<*) = flip (>>=*)
+
+infixr 1 =<<*
 
 
 (>=>*) :: (RightModule f, Monad m) => (a -> f m b) -> (b -> m c) -> (a -> f m c)
