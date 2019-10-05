@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric, DeriveTraversable, LambdaCase, QuantifiedConstraints, StandaloneDeriving #-}
+{-# LANGUAGE DeriveGeneric, DeriveTraversable, FlexibleInstances, LambdaCase, MultiParamTypeClasses, QuantifiedConstraints, StandaloneDeriving, UndecidableInstances #-}
 module Syntax.Scope
 ( -- * Scopes
   Scope(..)
@@ -14,7 +14,7 @@ module Syntax.Scope
 ) where
 
 import Control.Applicative (liftA2)
-import Control.Monad ((<=<), guard)
+import Control.Monad ((<=<), guard, join)
 import Control.Monad.Trans.Class
 import Data.Function (on)
 import GHC.Generics (Generic, Generic1)
@@ -56,6 +56,10 @@ instance MonadTrans (Scope a) where
 
 instance RightModule (Scope a) where
   Scope m >>=* f = Scope (fmap (>>= f) <$> m)
+
+instance (Algebra sig f, Syntax sig, Monad f) => Algebra sig (Scope a f) where
+  gen = toScope . gen . F
+  alg = toScope . alg . weave (F ()) (fmap join . traverse fromScope)
 
 
 toScope :: Algebra sig f => f (Var a b) -> Scope a f b
