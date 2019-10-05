@@ -7,7 +7,6 @@ module Syntax.Var
   -- * Converting
 , toEither
 , fromEither
-, matchEither
 , matchVar
 , fromMaybe
 , closed
@@ -58,9 +57,6 @@ toEither = unVar Left Right
 
 fromEither :: Either a b -> Var a b
 fromEither = either B F
-
-matchEither :: Algebra sig f => (b -> Either a c) -> b -> Var a (f c)
-matchEither f x = either B (F . gen) (f x)
 
 matchVar :: Algebra sig f => (b -> Var a c) -> b -> Var a (f c)
 matchVar f = fmap gen . f
