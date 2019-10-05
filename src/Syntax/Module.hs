@@ -36,6 +36,7 @@ import Syntax.Functor
 -- @
 class HFunctor f => RightModule f where
   (>>=*) :: Monad m => f m a -> (a -> m b) -> f m b
+
   infixl 1 >>=*
 
 (=<<*) :: (Monad m, RightModule f) => (a -> m b) -> f m a -> f m b
@@ -61,6 +62,7 @@ joinr = (>>=* id)
 
 class HFunctor f => LeftModule f where
   (*>>=) :: Monad m => m a -> (a -> f m b) -> f m b
+
   infixl 1 *>>=
 
 (*=<<) :: (Monad m, LeftModule f) => (a -> f m b) -> m a -> f m b
