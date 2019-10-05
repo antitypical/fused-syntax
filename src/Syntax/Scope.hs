@@ -56,7 +56,7 @@ instance RightModule (Scope a) where
 
 
 fromScope :: Monad f => Scope a f b -> f (Var a b)
-fromScope = unScope >=> sequenceA
+fromScope = instantiateEither (pure . either B F)
 
 toScope :: Algebra sig f => f (Var a b) -> Scope a f b
 toScope = abstractEither (unVar Left Right)
