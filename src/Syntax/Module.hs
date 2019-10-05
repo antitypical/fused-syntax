@@ -8,6 +8,7 @@ module Syntax.Module
 , joinr
   -- * Left modules
 , LeftModule(..)
+, (*>>)
 , (*=<<)
 , (*>=>)
 , (*<=<)
@@ -70,6 +71,11 @@ class HFunctor f => LeftModule f where
   (*>>=) :: Monad m => m a -> (a -> f m b) -> f m b
 
   infixl 1 *>>=
+
+(*>>) :: (Monad m, LeftModule f) => m a -> f m b -> f m b
+l *>> r = l *>>= const r
+
+infixl 1 *>>
 
 (*=<<) :: (Monad m, LeftModule f) => (a -> f m b) -> m a -> f m b
 (*=<<) = flip (*>>=)
