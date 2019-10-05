@@ -61,8 +61,8 @@ matchEither f x = either B (F . gen) (f x)
 matchVar :: Algebra sig f => (b -> Var a c) -> b -> Var a (f c)
 matchVar f = fmap gen . f
 
-fromMaybe :: (b -> Maybe a) -> (b -> Either a b)
-fromMaybe f a = maybe (Right a) Left (f a)
+fromMaybe :: (b -> Maybe a) -> (b -> Var a b)
+fromMaybe f a = maybe (F a) B (f a)
 
 
 closed :: Traversable f => f a -> Maybe (f b)

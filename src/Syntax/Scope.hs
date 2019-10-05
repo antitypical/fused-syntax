@@ -69,7 +69,7 @@ abstract1 :: (Algebra sig f, Eq a) => a -> f a -> Scope () f a
 abstract1 n = abstract (guard . (== n))
 
 abstract :: Algebra sig f => (b -> Maybe a) -> f b -> Scope a f b
-abstract f = abstractEither (fromMaybe f)
+abstract f = abstractVar (fromMaybe f)
 
 abstractEither :: Algebra sig f => (b -> Either a c) -> f b -> Scope a f c
 abstractEither f = Scope . fmap (matchEither f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
