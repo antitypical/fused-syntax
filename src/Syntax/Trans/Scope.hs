@@ -84,4 +84,4 @@ instantiateT :: (RightModule t, Monad f) => (a -> f b) -> ScopeT a t f b -> t f 
 instantiateT f = instantiateVarT (unVar f pure)
 
 instantiateVarT :: (RightModule t, Monad f) => (Var a b -> f c) -> ScopeT a t f b -> t f c
-instantiateVarT f = unScopeT >=>* unVar (f . B) (>>= f . F)
+instantiateVarT f = unVar (f . B) (f . F =<<) <=<* unScopeT
