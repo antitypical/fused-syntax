@@ -48,8 +48,10 @@ instance Monad (Var a) where
   B a >>= _ = B a
   F a >>= f = f a
 
+
 unVar :: (a -> c) -> (b -> c) -> Var a b -> c
 unVar z s = \case { B a -> z a ; F b -> s b }
+
 
 toEither :: Var a b -> Either a b
 toEither = unVar Left Right
