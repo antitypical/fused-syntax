@@ -8,9 +8,9 @@ module Syntax.Algebra
 import Syntax.Functor
 import Syntax.Sum
 
-class (HFunctor syntax, Functor carrier) => Algebra syntax carrier | carrier -> syntax where
-  gen :: a -> carrier a
-  alg :: syntax carrier a -> carrier a
+class (HFunctor syntax, Functor f) => Algebra syntax f | f -> syntax where
+  gen :: a -> f a
+  alg :: syntax f a -> f a
 
 
 type Has syn sig t = (Inject syn sig, Algebra sig t)
