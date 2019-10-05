@@ -1,3 +1,4 @@
+{-# LANGUAGE TypeOperators #-}
 module Syntax.Module
 ( -- * Right modules
   RightModule(..)
@@ -16,6 +17,7 @@ module Syntax.Module
 ) where
 
 import Syntax.Functor
+import Syntax.Sum
 
 -- | Modules over monads allow lifting of a monad’s product (i.e. 'Control.Monad.join') into another structure composed with the monad. A right-module @f m@ over a monad @m@ therefore allows one to extend @m@’s '>>=' operation to values of @f m@ using the '>>=*' operator.
 --
@@ -65,6 +67,11 @@ infixr 1 <=<*
 
 joinr :: (RightModule f, Monad m) => f m (m a) -> f m a
 joinr = (>>=* id)
+
+
+instance (RightModule f, RightModule g) => RightModule (f :+: g) where
+  L l >>=* f = L (l >>=* f)
+  R r >>=* f = R (r >>=* f)
 
 
 class HFunctor f => LeftModule f where

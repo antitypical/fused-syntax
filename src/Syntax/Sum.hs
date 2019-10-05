@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric, DeriveTraversable, FlexibleContexts, FlexibleInstances, MultiParamTypeClasses, PolyKinds, TypeOperators #-}
+{-# LANGUAGE FlexibleContexts, FlexibleInstances, MultiParamTypeClasses, PolyKinds, TypeOperators #-}
 module Syntax.Sum
 ( -- * Sum syntax
   (:+:)(..)
@@ -8,23 +8,7 @@ module Syntax.Sum
 , Project(..)
 ) where
 
-import GHC.Generics (Generic, Generic1)
-import Syntax.Functor
-import Syntax.Module
-
-data (f :+: g) t a
-  = L (f t a)
-  | R (g t a)
-  deriving (Eq, Foldable, Functor, Generic, Generic1, Ord, Show, Traversable)
-
-infixr 4 :+:
-
-instance (HFunctor f, HFunctor g) => HFunctor (f :+: g)
-
-instance (RightModule f, RightModule g) => RightModule (f :+: g) where
-  L l >>=* f = L (l >>=* f)
-  R r >>=* f = R (r >>=* f)
-
+import Control.Effect.Sum ((:+:)(..))
 
 unSum :: (f t a -> b) -> (g t a -> b) -> (f :+: g) t a -> b
 unSum f _ (L l) = f l
