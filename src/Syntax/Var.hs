@@ -3,6 +3,7 @@ module Syntax.Var
 ( -- * Variables
   Var(..)
 , unVar
+, toEither
 , matchEither
 , matchMaybe
 , closed
@@ -45,6 +46,9 @@ instance Monad (Var a) where
 
 unVar :: (a -> c) -> (b -> c) -> Var a b -> c
 unVar z s = \case { B a -> z a ; F b -> s b }
+
+toEither :: Var a b -> Either a b
+toEither = unVar Left Right
 
 matchEither :: Algebra sig f => (b -> Either a c) -> b -> Var a (f c)
 matchEither f x = either B (F . gen) (f x)
