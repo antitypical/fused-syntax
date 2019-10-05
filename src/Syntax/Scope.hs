@@ -12,6 +12,7 @@ module Syntax.Scope
 , instantiate1
 , instantiate
 , instantiateEither
+, instantiateVar
 ) where
 
 import Control.Applicative (liftA2)
@@ -86,3 +87,6 @@ instantiate f = instantiateEither (either f pure)
 
 instantiateEither :: Monad f => (Either a b -> f c) -> Scope a f b -> f c
 instantiateEither f = unScope >=> unVar (f . Left) (>>= f . Right)
+
+instantiateVar :: Monad f => (Var a b -> f c) -> Scope a f b -> f c
+instantiateVar f = unScope >=> unVar (f . B) (>>= f . F)
