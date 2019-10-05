@@ -12,6 +12,7 @@ module Syntax.Trans.Scope
 , instantiate1T
 , instantiateT
 , instantiateTEither
+, instantiateTVar
 ) where
 
 import Control.Applicative (liftA2)
@@ -88,3 +89,6 @@ instantiateT f = instantiateTEither (either f pure)
 
 instantiateTEither :: (RightModule t, Monad f) => (Either a b -> f c) -> ScopeT a t f b -> t f c
 instantiateTEither f = unScopeT >=>* unVar (f . Left) (>>= f . Right)
+
+instantiateTVar :: (RightModule t, Monad f) => (Var a b -> f c) -> ScopeT a t f b -> t f c
+instantiateTVar f = unScopeT >=>* unVar (f . B) (>>= f . F)
