@@ -61,7 +61,7 @@ fromScope :: Monad f => Scope a f b -> f (Var a b)
 fromScope = instantiateVar pure
 
 toScope :: Algebra sig f => f (Var a b) -> Scope a f b
-toScope = abstractEither toEither
+toScope = abstractVar id
 
 
 -- | Bind occurrences of a variable in a term, producing a term in which the variable is bound.
