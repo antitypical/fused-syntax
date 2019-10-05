@@ -10,7 +10,7 @@ module Syntax.Trans.Scope
 , abstractTVar
 , instantiate1T
 , instantiateT
-, instantiateTVar
+, instantiateVarT
 ) where
 
 import Control.Applicative (liftA2)
@@ -58,7 +58,7 @@ instance (HFunctor t, forall g . Functor g => Functor (t g)) => HFunctor (ScopeT
 
 
 fromScopeT :: (RightModule t, Monad f) => ScopeT a t f b -> t f (Var a b)
-fromScopeT = instantiateTVar pure
+fromScopeT = instantiateVarT pure
 
 toScopeT :: (Functor (t f), Algebra sig f) => t f (Var a b) -> ScopeT a t f b
 toScopeT = abstractTVar id
@@ -80,7 +80,7 @@ instantiate1T :: (RightModule t, Monad f) => f b -> ScopeT a t f b -> t f b
 instantiate1T t = instantiateT (const t)
 
 instantiateT :: (RightModule t, Monad f) => (a -> f b) -> ScopeT a t f b -> t f b
-instantiateT f = instantiateTVar (unVar f pure)
+instantiateT f = instantiateVarT (unVar f pure)
 
-instantiateTVar :: (RightModule t, Monad f) => (Var a b -> f c) -> ScopeT a t f b -> t f c
-instantiateTVar f = unScopeT >=>* unVar (f . B) (>>= f . F)
+instantiateVarT :: (RightModule t, Monad f) => (Var a b -> f c) -> ScopeT a t f b -> t f c
+instantiateVarT f = unScopeT >=>* unVar (f . B) (>>= f . F)
