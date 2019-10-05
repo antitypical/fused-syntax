@@ -55,9 +55,6 @@ instance RightModule (Scope a) where
   Scope m >>=* f = Scope (fmap (>>= f) <$> m)
 
 
-fromScope :: Monad f => Scope a f b -> f (Var a b)
-fromScope = instantiateVar pure
-
 toScope :: Algebra sig f => f (Var a b) -> Scope a f b
 toScope = abstractVar id
 
@@ -71,6 +68,10 @@ abstract f = abstractVar (fromMaybe f)
 
 abstractVar :: Algebra sig f => (b -> Var a c) -> f b -> Scope a f c
 abstractVar f = Scope . fmap (fmap gen . f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
+
+
+fromScope :: Monad f => Scope a f b -> f (Var a b)
+fromScope = instantiateVar pure
 
 
 -- | Substitute a term for the free variable in a given term, producing a closed term.
