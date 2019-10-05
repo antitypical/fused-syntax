@@ -85,7 +85,7 @@ instantiate1T :: (RightModule t, Monad f) => f b -> ScopeT a t f b -> t f b
 instantiate1T t = instantiateT (const t)
 
 instantiateT :: (RightModule t, Monad f) => (a -> f b) -> ScopeT a t f b -> t f b
-instantiateT f = instantiateTEither (either f pure)
+instantiateT f = instantiateTVar (unVar f pure)
 
 instantiateTEither :: (RightModule t, Monad f) => (Either a b -> f c) -> ScopeT a t f b -> t f c
 instantiateTEither f = unScopeT >=>* unVar (f . Left) (>>= f . Right)
