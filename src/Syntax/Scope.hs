@@ -58,8 +58,8 @@ instance RightModule (Scope a) where
 fromScope :: Monad f => Scope a f b -> f (Var a b)
 fromScope = unScope >=> sequenceA
 
-toScope :: Applicative f => f (Var a b) -> Scope a f b
-toScope = Scope . fmap (fmap pure)
+toScope :: Algebra sig f => f (Var a b) -> Scope a f b
+toScope = Scope . fmap (fmap gen)
 
 
 -- | Bind occurrences of a variable in a term, producing a term in which the variable is bound.
