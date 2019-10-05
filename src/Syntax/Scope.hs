@@ -8,6 +8,7 @@ module Syntax.Scope
 , abstract1
 , abstract
 , abstractEither
+, abstractVar
 , instantiate1
 , instantiate
 , instantiateEither
@@ -71,6 +72,9 @@ abstract f = abstractEither (fromMaybe f)
 
 abstractEither :: Algebra sig f => (b -> Either a c) -> f b -> Scope a f c
 abstractEither f = Scope . fmap (matchEither f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
+
+abstractVar :: Algebra sig f => (b -> Var a c) -> f b -> Scope a f c
+abstractVar f = Scope . fmap (matchVar f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
 
 
 -- | Substitute a term for the free variable in a given term, producing a closed term.
