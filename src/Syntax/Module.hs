@@ -79,6 +79,8 @@ instance (RightModule f, RightModule g) => RightModule (f :+: g) where
 
 class HFunctor f => LeftModule f where
   (*>>=) :: Monad m => m a -> (a -> f m b) -> f m b
+  default (*>>=) :: (Monad m, MonadTrans f, Monad (f m)) => m a -> (a -> f m b) -> f m b
+  m *>>= f = lift m >>= f
 
   infixl 1 *>>=
 
