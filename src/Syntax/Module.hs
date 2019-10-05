@@ -47,6 +47,7 @@ g <=<* f = \x -> f x >>=* g
 
 infixl 1 <=<*
 
+
 joinr :: (RightModule f, Monad m) => f m (m a) -> f m a
 joinr = (>>=* id)
 
@@ -54,6 +55,7 @@ joinr = (>>=* id)
 class HFunctor f => LeftModule f where
   (*>>=) :: Monad m => m a -> (a -> f m b) -> f m b
   infixl 1 *>>=
+
 
 (*>=>) :: (LeftModule f, Monad m) => (a -> m b) -> (b -> f m c) -> (a -> f m c)
 f *>=> g = \x -> f x *>>= g
@@ -64,6 +66,7 @@ infixl 1 *>=>
 g *<=< f = \x -> f x *>>= g
 
 infixl 1 *<=<
+
 
 joinl :: (LeftModule f, Monad m) => m (f m a) -> f m a
 joinl = (*>>= id)
