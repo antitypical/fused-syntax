@@ -4,6 +4,7 @@ module Syntax.Var
   Var(..)
 , unVar
 , toEither
+, fromEither
 , matchEither
 , matchMaybe
 , closed
@@ -49,6 +50,9 @@ unVar z s = \case { B a -> z a ; F b -> s b }
 
 toEither :: Var a b -> Either a b
 toEither = unVar Left Right
+
+fromEither :: Either a b -> Var a b
+fromEither = either B F
 
 matchEither :: Algebra sig f => (b -> Either a c) -> b -> Var a (f c)
 matchEither f x = either B (F . gen) (f x)
