@@ -83,7 +83,7 @@ instantiate1 :: Monad f => f b -> Scope a f b -> f b
 instantiate1 t = instantiate (const t)
 
 instantiate :: Monad f => (a -> f b) -> Scope a f b -> f b
-instantiate f = instantiateEither (either f pure)
+instantiate f = instantiateVar (unVar f pure)
 
 instantiateEither :: Monad f => (Either a b -> f c) -> Scope a f b -> f c
 instantiateEither f = unScope >=> unVar (f . Left) (>>= f . Right)
