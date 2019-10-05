@@ -7,7 +7,7 @@ module Syntax.Trans.Scope
 , toScopeT
 , abstract1T
 , abstractT
-, abstractTVar
+, abstractVarT
 , instantiate1T
 , instantiateT
 , instantiateVarT
@@ -61,7 +61,7 @@ fromScopeT :: (RightModule t, Monad f) => ScopeT a t f b -> t f (Var a b)
 fromScopeT = instantiateVarT pure
 
 toScopeT :: (Functor (t f), Algebra sig f) => t f (Var a b) -> ScopeT a t f b
-toScopeT = abstractTVar id
+toScopeT = abstractVarT id
 
 
 -- | Bind occurrences of a variable in a term, producing a term in which the variable is bound.
@@ -69,10 +69,10 @@ abstract1T :: (Functor (t f), Algebra sig f, Eq a) => a -> t f a -> ScopeT () t 
 abstract1T n = abstractT (guard . (== n))
 
 abstractT :: (Functor (t f), Algebra sig f) => (b -> Maybe a) -> t f b -> ScopeT a t f b
-abstractT f = abstractTVar (fromMaybe f)
+abstractT f = abstractVarT (fromMaybe f)
 
-abstractTVar :: (Functor (t f), Algebra sig f) => (b -> Var a c) -> t f b -> ScopeT a t f c
-abstractTVar f = ScopeT . fmap (matchVar f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
+abstractVarT :: (Functor (t f), Algebra sig f) => (b -> Var a c) -> t f b -> ScopeT a t f c
+abstractVarT f = ScopeT . fmap (matchVar f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
 
 
 -- | Substitute a term for the free variable in a given term, producing a closed term.
