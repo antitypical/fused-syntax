@@ -10,7 +10,6 @@ module Syntax.Trans.Scope
 , abstractTVar
 , instantiate1T
 , instantiateT
-, instantiateTEither
 , instantiateTVar
 ) where
 
@@ -82,9 +81,6 @@ instantiate1T t = instantiateT (const t)
 
 instantiateT :: (RightModule t, Monad f) => (a -> f b) -> ScopeT a t f b -> t f b
 instantiateT f = instantiateTVar (unVar f pure)
-
-instantiateTEither :: (RightModule t, Monad f) => (Either a b -> f c) -> ScopeT a t f b -> t f c
-instantiateTEither f = unScopeT >=>* unVar (f . Left) (>>= f . Right)
 
 instantiateTVar :: (RightModule t, Monad f) => (Var a b -> f c) -> ScopeT a t f b -> t f c
 instantiateTVar f = unScopeT >=>* unVar (f . B) (>>= f . F)
