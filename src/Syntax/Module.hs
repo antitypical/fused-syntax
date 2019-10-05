@@ -7,6 +7,7 @@ module Syntax.Module
 , joinr
   -- * Left modules
 , LeftModule(..)
+, (*=<<)
 , (*>=>)
 , (*<=<)
 , joinl
@@ -61,6 +62,11 @@ joinr = (>>=* id)
 class HFunctor f => LeftModule f where
   (*>>=) :: Monad m => m a -> (a -> f m b) -> f m b
   infixl 1 *>>=
+
+(*=<<) :: (Monad m, LeftModule f) => (a -> f m b) -> m a -> f m b
+(*=<<) = flip (*>>=)
+
+infixr 1 *=<<
 
 
 (*>=>) :: (LeftModule f, Monad m) => (a -> m b) -> (b -> f m c) -> (a -> f m c)
