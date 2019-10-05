@@ -30,6 +30,9 @@ newtype ScopeT a t f b = ScopeT (t f (Var a (f b)))
 unScopeT :: ScopeT a t f b -> t f (Var a (f b))
 unScopeT (ScopeT s) = s
 
+instance (HFunctor t, forall g . Functor g => Functor (t g)) => HFunctor (ScopeT a t) where
+  hmap f = ScopeT . hmap f . fmap (fmap f) . unScopeT
+
 instance (RightModule t, Monad f, Eq  a, Eq  b, forall a . Eq  a => Eq  (t f a)) => Eq  (ScopeT a t f b) where
   (==) = (==) `on` fromScopeT
 
@@ -52,9 +55,6 @@ instance (HFunctor t, forall g . Functor g => Functor (t g)) => RightModule (Sco
 
 instance MonadTrans f => MonadTrans (ScopeT a f) where
   lift = ScopeT . lift . pure . F
-
-instance (HFunctor t, forall g . Functor g => Functor (t g)) => HFunctor (ScopeT a t) where
-  hmap f = ScopeT . hmap f . fmap (fmap f) . unScopeT
 
 
 toScopeT :: (Functor (t f), Algebra sig f) => t f (Var a b) -> ScopeT a t f b
