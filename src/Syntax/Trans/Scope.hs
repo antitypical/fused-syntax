@@ -60,7 +60,7 @@ instance (HFunctor t, forall g . Functor g => Functor (t g)) => HFunctor (ScopeT
 
 
 fromScopeT :: (RightModule t, Monad f) => ScopeT a t f b -> t f (Var a b)
-fromScopeT = unScopeT >=>* sequenceA
+fromScopeT = instantiateTVar pure
 
 toScopeT :: (Functor (t f), Algebra sig f) => t f (Var a b) -> ScopeT a t f b
 toScopeT = abstractTVar id
