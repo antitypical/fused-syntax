@@ -49,5 +49,6 @@ library
   other-modules:
     Example.Lam
   build-depends:
-      base         ^>=4.12.0.0
-    , transformers ^>= 0.5.6
+      base          ^>=4.12.0.0
+    , fused-effects ^>= 0.5
+    , transformers  ^>= 0.5.6
