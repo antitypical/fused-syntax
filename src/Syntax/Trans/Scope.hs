@@ -8,6 +8,7 @@ module Syntax.Trans.Scope
 , abstract1T
 , abstractT
 , abstractTEither
+, abstractTVar
 , instantiate1T
 , instantiateT
 , instantiateTEither
@@ -73,6 +74,9 @@ abstractT f = abstractTEither (fromMaybe f)
 
 abstractTEither :: (Functor (t f), Algebra sig f) => (b -> Either a c) -> t f b -> ScopeT a t f c
 abstractTEither f = ScopeT . fmap (matchEither f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
+
+abstractTVar :: (Functor (t f), Algebra sig f) => (b -> Var a c) -> t f b -> ScopeT a t f c
+abstractTVar f = ScopeT . fmap (matchVar f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
 
 
 -- | Substitute a term for the free variable in a given term, producing a closed term.
