@@ -32,6 +32,9 @@ unScope (Scope s) = s
 instance HFunctor (Scope a) where
   hmap f = Scope . f . fmap (fmap f) . unScope
 
+instance Syntax   (Scope a) where
+  weave state dist (Scope f) = Scope (fmap dist . sequenceA <$> dist (f <$ state))
+
 instance (Eq   a, Eq   b, forall a . Eq   a => Eq   (f a), Monad f) => Eq   (Scope a f b) where
   (==) = (==) `on` fromScope
 
