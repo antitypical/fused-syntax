@@ -62,8 +62,8 @@ instance (HFunctor t, forall g . Functor g => Functor (t g)) => HFunctor (ScopeT
 fromScopeT :: (RightModule t, Monad f) => ScopeT a t f b -> t f (Var a b)
 fromScopeT = unScopeT >=>* sequenceA
 
-toScopeT :: (Functor (t f), Applicative f) => t f (Var a b) -> ScopeT a t f b
-toScopeT = ScopeT . fmap (fmap pure)
+toScopeT :: (Functor (t f), Algebra sig f) => t f (Var a b) -> ScopeT a t f b
+toScopeT = abstractTVar id
 
 
 -- | Bind occurrences of a variable in a term, producing a term in which the variable is bound.
