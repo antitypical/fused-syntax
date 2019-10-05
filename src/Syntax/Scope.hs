@@ -14,7 +14,7 @@ module Syntax.Scope
 ) where
 
 import Control.Applicative (liftA2)
-import Control.Monad ((>=>), guard)
+import Control.Monad ((<=<), guard)
 import Control.Monad.Trans.Class
 import Data.Function (on)
 import GHC.Generics (Generic, Generic1)
@@ -82,4 +82,4 @@ instantiate :: Monad f => (a -> f b) -> Scope a f b -> f b
 instantiate f = instantiateVar (unVar f pure)
 
 instantiateVar :: Monad f => (Var a b -> f c) -> Scope a f b -> f c
-instantiateVar f = unScope >=> unVar (f . B) (>>= f . F)
+instantiateVar f = unVar (f . B) (f . F =<<) <=< unScope
