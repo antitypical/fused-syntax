@@ -11,6 +11,7 @@ module Syntax.Var
 , closed
 ) where
 
+import Control.Monad ((<=<))
 import Data.Bifoldable
 import Data.Bifunctor
 import Data.Bitraversable
@@ -59,7 +60,7 @@ matchEither :: Algebra sig f => (b -> Either a c) -> b -> Var a (f c)
 matchEither f x = either B (F . gen) (f x)
 
 matchVar :: Algebra sig f => (b -> Var a c) -> b -> Var a (f c)
-matchVar f = unVar B (F . gen) . f
+matchVar f = F . gen <=< f
 
 fromMaybe :: (b -> Maybe a) -> (b -> Either a b)
 fromMaybe f a = maybe (Right a) Left (f a)
