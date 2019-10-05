@@ -7,7 +7,6 @@ module Syntax.Scope
 , toScope
 , abstract1
 , abstract
-, abstractEither
 , abstractVar
 , instantiate1
 , instantiate
@@ -70,9 +69,6 @@ abstract1 n = abstract (guard . (== n))
 
 abstract :: Algebra sig f => (b -> Maybe a) -> f b -> Scope a f b
 abstract f = abstractVar (fromMaybe f)
-
-abstractEither :: Algebra sig f => (b -> Either a c) -> f b -> Scope a f c
-abstractEither f = Scope . fmap (matchEither f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
 
 abstractVar :: Algebra sig f => (b -> Var a c) -> f b -> Scope a f c
 abstractVar f = Scope . fmap (fmap gen . f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
