@@ -40,12 +40,12 @@ class HFunctor f => RightModule f where
 (>=>*) :: (RightModule f, Monad m) => (a -> f m b) -> (b -> m c) -> (a -> f m c)
 f >=>* g = \x -> f x >>=* g
 
-infixl 1 >=>*
+infixr 1 >=>*
 
 (<=<*) :: (RightModule f, Monad m) => (b -> m c) -> (a -> f m b) -> (a -> f m c)
 g <=<* f = \x -> f x >>=* g
 
-infixl 1 <=<*
+infixr 1 <=<*
 
 
 joinr :: (RightModule f, Monad m) => f m (m a) -> f m a
@@ -60,12 +60,12 @@ class HFunctor f => LeftModule f where
 (*>=>) :: (LeftModule f, Monad m) => (a -> m b) -> (b -> f m c) -> (a -> f m c)
 f *>=> g = \x -> f x *>>= g
 
-infixl 1 *>=>
+infixr 1 *>=>
 
 (*<=<) :: (LeftModule f, Monad m) => (b -> f m c) -> (a -> m b) -> (a -> f m c)
 g *<=< f = \x -> f x *>>= g
 
-infixl 1 *<=<
+infixr 1 *<=<
 
 
 joinl :: (LeftModule f, Monad m) => m (f m a) -> f m a
