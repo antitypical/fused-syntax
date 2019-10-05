@@ -7,7 +7,7 @@ module Syntax.Stack
 , unprefixEither
 ) where
 
-import Syntax.Var (matchMaybe)
+import Syntax.Var (fromMaybe)
 
 data Stack a
   = Nil
@@ -31,7 +31,7 @@ unprefix
   :: (Int -> t -> Maybe (a, t)) -- ^ A function taking the 0-based index into the prefix & the current term, and optionally returning a pair of the prefixing value and the inner subterm.
   -> t                          -- ^ The initial term.
   -> (Stack a, t)               -- ^ A stack of prefixing values & the final subterm.
-unprefix from = unprefixEither (matchMaybe . from)
+unprefix from = unprefixEither (fromMaybe . from)
 
 -- | Unwrap a (possibly-empty) prefix of @a@s wrapping a @b@ within a @t@ using a helper function.
 --

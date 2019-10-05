@@ -7,7 +7,7 @@ module Syntax.Var
 , fromEither
 , matchEither
 , matchVar
-, matchMaybe
+, fromMaybe
 , closed
 ) where
 
@@ -61,8 +61,8 @@ matchEither f x = either B (F . gen) (f x)
 matchVar :: Algebra sig f => (b -> Var a c) -> b -> Var a (f c)
 matchVar f = unVar B (F . gen) . f
 
-matchMaybe :: (b -> Maybe a) -> (b -> Either a b)
-matchMaybe f a = maybe (Right a) Left (f a)
+fromMaybe :: (b -> Maybe a) -> (b -> Either a b)
+fromMaybe f a = maybe (Right a) Left (f a)
 
 
 closed :: Traversable f => f a -> Maybe (f b)

@@ -69,7 +69,7 @@ abstract1T :: (Functor (t f), Algebra sig f, Eq a) => a -> t f a -> ScopeT () t 
 abstract1T n = abstractT (guard . (== n))
 
 abstractT :: (Functor (t f), Algebra sig f) => (b -> Maybe a) -> t f b -> ScopeT a t f b
-abstractT f = abstractTEither (matchMaybe f)
+abstractT f = abstractTEither (fromMaybe f)
 
 abstractTEither :: (Functor (t f), Algebra sig f) => (b -> Either a c) -> t f b -> ScopeT a t f c
 abstractTEither f = ScopeT . fmap (matchEither f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
