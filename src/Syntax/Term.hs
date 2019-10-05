@@ -54,7 +54,7 @@ instance ( RightModule sig
   Term t >>= f = Term (t >>=* f)
 
 
-instance ( RightModule sig
+instance ( HFunctor sig
          , forall f . Functor f => Functor (sig f)
          )
       => Algebra sig (Term sig) where
