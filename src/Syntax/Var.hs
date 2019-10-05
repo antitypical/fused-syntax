@@ -2,7 +2,9 @@
 module Syntax.Var
 ( -- * Variables
   Var(..)
+  -- * Eliminating
 , unVar
+  -- * Converting
 , toEither
 , fromEither
 , matchEither
