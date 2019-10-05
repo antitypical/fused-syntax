@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeOperators #-}
+{-# LANGUAGE DefaultSignatures, TypeOperators #-}
 module Syntax.Module
 ( -- * Right modules
   RightModule(..)
@@ -16,6 +16,7 @@ module Syntax.Module
 , joinl
 ) where
 
+import Control.Monad.Trans.Class
 import Syntax.Functor
 import Syntax.Sum
 
@@ -40,6 +41,8 @@ import Syntax.Sum
 -- @
 class HFunctor f => RightModule f where
   (>>=*) :: Monad m => f m a -> (a -> m b) -> f m b
+  default (>>=*) :: (Monad m, MonadTrans f, Monad (f m)) => f m a -> (a -> m b) -> f m b
+  m >>=* f = m >>= lift . f
 
   infixl 1 >>=*
 
