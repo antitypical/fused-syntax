@@ -57,9 +57,6 @@ instance (HFunctor t, forall g . Functor g => Functor (t g)) => HFunctor (ScopeT
   hmap f = ScopeT . hmap f . fmap (fmap f) . unScopeT
 
 
-fromScopeT :: (RightModule t, Monad f) => ScopeT a t f b -> t f (Var a b)
-fromScopeT = instantiateVarT pure
-
 toScopeT :: (Functor (t f), Algebra sig f) => t f (Var a b) -> ScopeT a t f b
 toScopeT = abstractVarT id
 
@@ -73,6 +70,10 @@ abstractT f = abstractVarT (fromMaybe f)
 
 abstractVarT :: (Functor (t f), Algebra sig f) => (b -> Var a c) -> t f b -> ScopeT a t f c
 abstractVarT f = ScopeT . fmap (matchVar f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
+
+
+fromScopeT :: (RightModule t, Monad f) => ScopeT a t f b -> t f (Var a b)
+fromScopeT = instantiateVarT pure
 
 
 -- | Substitute a term for the free variable in a given term, producing a closed term.
