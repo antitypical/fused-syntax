@@ -59,7 +59,7 @@ fromScope :: Monad f => Scope a f b -> f (Var a b)
 fromScope = unScope >=> sequenceA
 
 toScope :: Algebra sig f => f (Var a b) -> Scope a f b
-toScope = Scope . fmap (fmap gen)
+toScope = abstractEither (unVar Left Right)
 
 
 -- | Bind occurrences of a variable in a term, producing a term in which the variable is bound.
