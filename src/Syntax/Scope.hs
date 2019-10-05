@@ -57,7 +57,7 @@ instance MonadTrans (Scope a) where
 instance RightModule (Scope a) where
   Scope m >>=* f = Scope (fmap (>>= f) <$> m)
 
-instance (Algebra sig f, Syntax sig, Monad f) => Algebra sig (Scope a f) where
+instance (Algebra sig f, Monad f) => Algebra sig (Scope a f) where
   gen = toScope . gen . F
   alg = toScope . alg . weave (F ()) (fmap join . traverse fromScope)
 
