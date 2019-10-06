@@ -7,7 +7,7 @@ module Syntax.Pretty
 
 data Prec = Prec
   { precedence :: Maybe Int
-  , doc        :: String
+  , unPrec     :: String
   }
   deriving (Eq, Ord, Show)
 
