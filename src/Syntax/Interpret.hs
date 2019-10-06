@@ -58,7 +58,7 @@ runInterpret var alg m = reify (Alg (InterpretC . var) (InterpretC . alg . hmap 
   go m = Tagged (runInterpretC m)
 
 
--- | Interpret an effect using a higher-order function with some state variable.
+-- | Interpret syntax using a higher-order function with some state variable.
 runInterpretState
   :: (HFunctor sig, Functor m)
   => (forall x . s ->                  x -> m (s, x))
