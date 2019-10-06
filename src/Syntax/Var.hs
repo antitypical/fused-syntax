@@ -7,7 +7,6 @@ module Syntax.Var
   -- * Converting
 , toEither
 , fromEither
-, matchVar
 , fromMaybe
 , closed
 ) where
@@ -16,7 +15,6 @@ import Data.Bifoldable
 import Data.Bifunctor
 import Data.Bitraversable
 import GHC.Generics (Generic, Generic1)
-import Syntax.Algebra
 
 data Var a b
   = B a
@@ -57,9 +55,6 @@ toEither = unVar Left Right
 
 fromEither :: Either a b -> Var a b
 fromEither = either B F
-
-matchVar :: Algebra sig f => (b -> Var a c) -> b -> Var a (f c)
-matchVar f = fmap gen . f
 
 fromMaybe :: (b -> Maybe a) -> (b -> Var a b)
 fromMaybe f a = maybe (F a) B (f a)
