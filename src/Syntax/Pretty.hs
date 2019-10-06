@@ -23,7 +23,7 @@ atom = Prec Nothing
 prec :: Int -> a -> Prec a
 prec = Prec . Just
 
-withPrec :: Int -> Prec String -> String
+withPrec :: (IsString a, Semigroup a) => Int -> Prec a -> a
 withPrec d (Prec d' a) = prettyParens (maybe False (d >) d') a
 
 
