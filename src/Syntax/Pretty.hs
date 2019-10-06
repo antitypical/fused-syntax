@@ -21,6 +21,7 @@ data Prec a = Prec
 atom :: a -> Prec a
 atom = Prec Nothing
 
+-- | A document that requires parentheses in contexts above a certain precedence level.
 prec :: Int -> a -> Prec a
 prec = Prec . Just
 
