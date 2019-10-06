@@ -1,9 +1,10 @@
-{-# LANGUAGE FlexibleContexts, FlexibleInstances, MultiParamTypeClasses, PolyKinds, TypeOperators #-}
+{-# LANGUAGE ConstraintKinds, FlexibleContexts, FlexibleInstances, MultiParamTypeClasses, PolyKinds, TypeOperators #-}
 module Syntax.Sum
 ( -- * Sum syntax
   (:+:)(..)
 , unSum
   -- * Membership
+, Member
 , Inject(..)
 , Project(..)
 ) where
@@ -13,6 +14,9 @@ import Control.Effect.Sum ((:+:)(..))
 unSum :: (f t a -> b) -> (g t a -> b) -> (f :+: g) t a -> b
 unSum f _ (L l) = f l
 unSum _ g (R r) = g r
+
+
+type Member t u = (Inject t u, Project t u)
 
 
 class Inject t u where
