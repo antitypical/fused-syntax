@@ -1,4 +1,4 @@
-{-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE QuantifiedConstraints, RankNTypes #-}
 module Syntax.Functor
 ( HFunctor(..)
 , Syntax(..)
@@ -8,5 +8,5 @@ module Syntax.Functor
 
 import Control.Effect.Carrier (HFunctor(..), GHFunctor(..))
 
-class HFunctor sig => Syntax sig where
+class (HFunctor sig, forall f . Functor f => Functor (sig f)) => Syntax sig where
   weave :: (Traversable f, Monad m, Monad n) => f () -> (forall x . f (m x) -> n (f x)) -> sig m a -> sig n (f a)
