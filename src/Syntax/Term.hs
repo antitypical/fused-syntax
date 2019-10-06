@@ -1,9 +1,10 @@
-{-# LANGUAGE DeriveTraversable, FlexibleInstances, MultiParamTypeClasses, QuantifiedConstraints, RankNTypes, StandaloneDeriving, UndecidableInstances #-}
+{-# LANGUAGE DeriveTraversable, FlexibleInstances, LambdaCase, MultiParamTypeClasses, QuantifiedConstraints, RankNTypes, StandaloneDeriving, UndecidableInstances #-}
 module Syntax.Term
 ( Term(..)
 , hoistTerm
 , unTerm
 , prjTerm
+, iter
 ) where
 
 import Control.Applicative (Alternative(..))
@@ -72,3 +73,9 @@ unTerm _        = empty
 
 prjTerm :: (Alternative m, Project sub sig) => Term sig a -> m (sub (Term sig) a)
 prjTerm = maybe empty pure . (prj <=< unTerm)
+
+
+iter :: Algebra sig m => Term sig a -> m a
+iter = \case
+  Var  a -> gen a
+  Term t -> alg (hmap iter t)
