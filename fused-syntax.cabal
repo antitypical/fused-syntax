@@ -39,6 +39,7 @@ library
   exposed-modules:
     Syntax.Algebra
     Syntax.Functor
+    Syntax.Interpret
     Syntax.Module
     Syntax.Pretty
     Syntax.Scope
