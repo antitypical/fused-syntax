@@ -4,7 +4,7 @@ module Syntax.Interpret
 , runInterpretState
 , InterpretC(..)
 , Reifies
-, Handler
+, Alg
   -- * Re-exports
 , Carrier
 , run
@@ -17,9 +17,9 @@ import Syntax.Functor
 import Unsafe.Coerce (unsafeCoerce)
 
 
--- | A @Handler@ is a function that interprets effects described by @sig@ into the carrier monad @m@.
-newtype Handler sig m = Handler
-  { runHandler :: forall s x . sig (InterpretC s sig m) x -> InterpretC s sig m x }
+-- | An @Alg@ is a function that interprets effects described by @sig@ into the carrier monad @m@.
+newtype Alg sig m = Alg
+  { runAlg :: forall s x . sig (InterpretC s sig m) x -> InterpretC s sig m x }
 
 
 newtype Tagged a b = Tagged { unTag :: b }
@@ -50,9 +50,9 @@ runInterpret
   :: (HFunctor sig, Functor m)
   => (forall x .       x -> m x)
   -> (forall x . sig m x -> m x)
-  -> (forall s . Reifies s (Handler sig m) => InterpretC s sig m a)
+  -> (forall s . Reifies s (Alg sig m) => InterpretC s sig m a)
   -> m a
-runInterpret var alg m = reify (Handler (InterpretC . alg . hmap coerce)) (go m) where
+runInterpret var alg m = reify (Alg (InterpretC . alg . hmap coerce)) (go m) where
   go :: InterpretC s sig m x -> Tagged s (m x)
   go m = Tagged (runInterpretC m)
 
@@ -63,7 +63,7 @@ runInterpretState
   => (forall x . s ->                  x -> m (s, x))
   -> (forall x . s -> sig (StateC s m) x -> m (s, x))
   -> s
-  -> (forall t. Reifies t (Handler sig (StateC s m)) => InterpretC t sig (StateC s m) a)
+  -> (forall t. Reifies t (Alg sig (StateC s m)) => InterpretC t sig (StateC s m) a)
   -> m (s, a)
 runInterpretState var alg state m = runState state
   $ runInterpret (\ x -> StateC (\ s -> var s x)) (\ x -> StateC (\ s -> alg s x)) m
@@ -72,7 +72,7 @@ runInterpretState var alg state m = runState state
 newtype InterpretC s (sig :: (* -> *) -> * -> *) m a = InterpretC { runInterpretC :: m a }
   deriving (Applicative, Functor, Monad)
 
-instance (HFunctor sig, Reifies s (Handler sig m), forall f . Functor f => Functor (sig f), Functor m) => Algebra sig (InterpretC s sig m) where
+instance (HFunctor sig, Reifies s (Alg sig m), forall f . Functor f => Functor (sig f), Functor m) => Algebra sig (InterpretC s sig m) where
   -- var = InterpretC . var
 
-  alg = runHandler (unTag (reflect @s))
+  alg = runAlg (unTag (reflect @s))
