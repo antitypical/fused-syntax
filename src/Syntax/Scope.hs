@@ -34,11 +34,11 @@ instance HFunctor (Scope a) where
 
 instance Syntax   (Scope a)
 
-instance (Eq   a, Eq   b, forall a . Eq   a => Eq   (f a), Monad f) => Eq   (Scope a f b) where
+instance (Eq  a, Eq  b, forall a . Eq  a => Eq  (f a), Monad f) => Eq  (Scope a f b) where
   (==) = (==) `on` fromScope
 
-instance (Ord  a, Ord  b, forall a . Eq   a => Eq   (f a)
-                        , forall a . Ord  a => Ord  (f a), Monad f) => Ord  (Scope a f b) where
+instance (Ord a, Ord b, forall a . Eq  a => Eq  (f a)
+                      , forall a . Ord a => Ord (f a), Monad f) => Ord (Scope a f b) where
   compare = compare `on` fromScope
 
 deriving instance (Show a, Show b, forall a . Show a => Show (f a)) => Show (Scope a f b)
