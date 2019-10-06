@@ -63,7 +63,12 @@ instance ( HFunctor sig
   alg = Alg
 
 
-hoistTerm :: (HFunctor sig, forall g . Functor g => Functor (sig g)) => (forall m x . sig m x -> sig' m x) -> Term sig a -> Term sig' a
+hoistTerm
+  :: ( HFunctor sig
+     , forall g . Functor g => Functor (sig g)
+     )
+  => (forall m x . sig m x -> sig' m x)
+  -> (Term sig a -> Term sig' a)
 hoistTerm f = go where
   go (Var v) = Var v
   go (Alg t) = Alg (f (hmap (hoistTerm f) t))
