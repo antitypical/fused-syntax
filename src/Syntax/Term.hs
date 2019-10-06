@@ -16,7 +16,7 @@ import Syntax.Sum
 
 data Term sig a
   = Var a
-  | Term (sig (Term sig) a)
+  | Alg (sig (Term sig) a)
 
 deriving instance ( Eq a
                   , RightModule sig
@@ -51,25 +51,25 @@ instance ( RightModule sig
          , forall f . Functor f => Functor (sig f)
          )
       => Monad (Term sig) where
-  Var  a >>= f = f a
-  Term t >>= f = Term (t >>=* f)
+  Var a >>= f = f a
+  Alg t >>= f = Alg (t >>=* f)
 
 
 instance Syntax sig
       => Algebra sig (Term sig) where
   var = Var
-  alg = Term
+  alg = Alg
 
 
 hoistTerm :: (HFunctor sig, forall g . Functor g => Functor (sig g)) => (forall m x . sig m x -> sig' m x) -> Term sig a -> Term sig' a
 hoistTerm f = go
-  where go (Var v)  = Var v
-        go (Term t) = Term (f (hmap (hoistTerm f) t))
+  where go (Var v) = Var v
+        go (Alg t) = Alg (f (hmap (hoistTerm f) t))
 
 
 unTerm :: Alternative m => Term sig a -> m (sig (Term sig) a)
-unTerm (Term t) = pure t
-unTerm _        = empty
+unTerm (Alg t) = pure t
+unTerm _       = empty
 
 prjTerm :: (Alternative m, Project sub sig) => Term sig a -> m (sub (Term sig) a)
 prjTerm = maybe empty pure . (prj <=< unTerm)
@@ -77,5 +77,5 @@ prjTerm = maybe empty pure . (prj <=< unTerm)
 
 iter :: Algebra sig m => Term sig a -> m a
 iter = \case
-  Var  a -> var a
-  Term t -> alg (hmap iter t)
+  Var a -> var a
+  Alg t -> alg (hmap iter t)
