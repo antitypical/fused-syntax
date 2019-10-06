@@ -8,7 +8,7 @@ module Syntax.Algebra
 import Syntax.Functor
 import Syntax.Sum
 
-class (Syntax sig, Functor f) => Algebra sig f | f -> sig where
+class (HFunctor sig, Functor f) => Algebra sig f | f -> sig where
   var ::       a -> f a
   alg :: sig f a -> f a
 

@@ -55,7 +55,9 @@ instance ( RightModule sig
   Alg t >>= f = Alg (t >>=* f)
 
 
-instance Syntax sig
+instance ( HFunctor sig
+         , forall f . Functor f => Functor (sig f)
+         )
       => Algebra sig (Term sig) where
   var = Var
   alg = Alg
@@ -75,7 +77,7 @@ prjTerm :: (Alternative m, Project sub sig) => Term sig a -> m (sub (Term sig) a
 prjTerm = maybe empty pure . (prj <=< unTerm)
 
 
-iter :: Algebra sig m => Term sig a -> m a
+iter :: (Algebra sig m, forall f . Functor f => Functor (sig f)) => Term sig a -> m a
 iter = \case
   Var a -> var a
   Alg t -> alg (hmap iter t)
