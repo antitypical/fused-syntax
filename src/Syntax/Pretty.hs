@@ -3,6 +3,7 @@ module Syntax.Pretty
   Prec(..)
 , atom
 , prec
+, withPrec
   -- * Conveniences
 , prettyParens
 ) where
@@ -18,6 +19,9 @@ atom = Prec Nothing
 
 prec :: Int -> String -> Prec
 prec = Prec . Just
+
+withPrec :: Int -> Prec -> String
+withPrec d (Prec d' a) = prettyParens (maybe False (d >) d') a
 
 
 prettyParens :: Bool -> String -> String
