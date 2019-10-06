@@ -31,7 +31,7 @@ prettyParens :: (IsString a, Semigroup a) => Bool -> a -> a
 prettyParens True  s = fromString "(" <> s <> fromString ")"
 prettyParens False s = s
 
-prettyVar :: Int -> String
-prettyVar i = alphabet !! r : if q > 0 then show q else "" where
+prettyVar :: IsString a => Int -> a
+prettyVar i = fromString $ alphabet !! r : if q > 0 then show q else "" where
   (q, r) = i `divMod` 26
   alphabet = ['a'..'z']
