@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveTraversable, FlexibleInstances, LambdaCase, MultiParamTypeClasses, QuantifiedConstraints, RankNTypes, StandaloneDeriving, UndecidableInstances #-}
+{-# LANGUAGE DeriveTraversable, FlexibleInstances, LambdaCase, MultiParamTypeClasses, QuantifiedConstraints, RankNTypes, ScopedTypeVariables, StandaloneDeriving, UndecidableInstances #-}
 module Syntax.Term
 ( Term(..)
 , hoistTerm
@@ -64,14 +64,16 @@ instance ( HFunctor sig
 
 
 hoistTerm
-  :: ( HFunctor sig
+  :: forall sig sig' a
+  .  ( HFunctor sig
      , forall g . Functor g => Functor (sig g)
      )
   => (forall m x . sig m x -> sig' m x)
   -> (Term sig a -> Term sig' a)
 hoistTerm f = go where
+  go :: forall a . Term sig a -> Term sig' a
   go (Var v) = Var v
-  go (Alg t) = Alg (f (hmap (hoistTerm f) t))
+  go (Alg t) = Alg (f (hmap go t))
 
 
 unTerm :: Alternative m => Term sig a -> m (sig (Term sig) a)
