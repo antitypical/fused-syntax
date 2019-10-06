@@ -3,7 +3,7 @@ cabal-version:       2.2
 name:                fused-syntax
 version:             0.0.0.0
 synopsis:            Fast, flexible, fused syntax operations for Haskell
--- description:
+description:         Fast, flexible, fused syntax operations for languages implemented in Haskell
 homepage:            https://github.com/antitypical/fused-syntax
 bug-reports:         https://github.com/antitypical/fused-syntax/issues
 license:             BSD-3-Clause
