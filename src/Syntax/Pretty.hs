@@ -9,19 +9,19 @@ module Syntax.Pretty
 , prettyVar
 ) where
 
-data Prec = Prec
+data Prec a = Prec
   { precedence :: Maybe Int
-  , unPrec     :: String
+  , unPrec     :: a
   }
   deriving (Eq, Ord, Show)
 
-atom :: String -> Prec
+atom :: a -> Prec a
 atom = Prec Nothing
 
-prec :: Int -> String -> Prec
+prec :: Int -> a -> Prec a
 prec = Prec . Just
 
-withPrec :: Int -> Prec -> String
+withPrec :: Int -> Prec String -> String
 withPrec d (Prec d' a) = prettyParens (maybe False (d >) d') a
 
 
