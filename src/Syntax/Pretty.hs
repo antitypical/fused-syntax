@@ -9,6 +9,8 @@ module Syntax.Pretty
 , prettyVar
 ) where
 
+import Data.String
+
 data Prec a = Prec
   { precedence :: Maybe Int
   , unPrec     :: a
@@ -25,8 +27,8 @@ withPrec :: Int -> Prec String -> String
 withPrec d (Prec d' a) = prettyParens (maybe False (d >) d') a
 
 
-prettyParens :: Bool -> String -> String
-prettyParens True  s = "(" <> s <> ")"
+prettyParens :: (IsString a, Semigroup a) => Bool -> a -> a
+prettyParens True  s = fromString "(" <> s <> fromString ")"
 prettyParens False s = s
 
 prettyVar :: Int -> String
