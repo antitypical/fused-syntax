@@ -18,8 +18,9 @@ import Unsafe.Coerce (unsafeCoerce)
 
 
 -- | An @Alg@ is a function that interprets syntax described by @sig@ into the carrier type @m@.
-newtype Alg sig m = Alg
-  { runAlg :: forall s x . sig (InterpretC s sig m) x -> InterpretC s sig m x }
+data Alg sig m = Alg
+  { runVar :: forall s x .                          x -> InterpretC s sig m x
+  , runAlg :: forall s x . sig (InterpretC s sig m) x -> InterpretC s sig m x }
 
 
 newtype Tagged a b = Tagged { unTag :: b }
@@ -52,7 +53,7 @@ runInterpret
   -> (forall x . sig m x -> m x)
   -> (forall s . Reifies s (Alg sig m) => InterpretC s sig m a)
   -> m a
-runInterpret var alg m = reify (Alg (InterpretC . alg . hmap coerce)) (go m) where
+runInterpret var alg m = reify (Alg (InterpretC . var) (InterpretC . alg . hmap coerce)) (go m) where
   go :: InterpretC s sig m x -> Tagged s (m x)
   go m = Tagged (runInterpretC m)
 
@@ -73,6 +74,6 @@ newtype InterpretC s (sig :: (* -> *) -> * -> *) m a = InterpretC { runInterpret
   deriving (Applicative, Functor, Monad)
 
 instance (HFunctor sig, Reifies s (Alg sig m), forall f . Functor f => Functor (sig f), Functor m) => Algebra sig (InterpretC s sig m) where
-  -- var = InterpretC . var
+  var = runVar (unTag (reflect @s))
 
   alg = runAlg (unTag (reflect @s))
