@@ -17,7 +17,7 @@ import Syntax.Functor
 import Unsafe.Coerce (unsafeCoerce)
 
 
--- | An @Alg@ is a function that interprets effects described by @sig@ into the carrier monad @m@.
+-- | An @Alg@ is a function that interprets syntax described by @sig@ into the carrier type @m@.
 newtype Alg sig m = Alg
   { runAlg :: forall s x . sig (InterpretC s sig m) x -> InterpretC s sig m x }
 
