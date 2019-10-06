@@ -44,7 +44,7 @@ reify :: forall a r . a -> (forall s . Reifies s a => Tagged s r) -> r
 reify a k = unsafeCoerce (Magic @a k) a
 
 
--- | Interpret an effect using a higher-order function.
+-- | Interpret syntax using a higher-order function.
 --
 -- Note that due to the higher-rank type, you have to use either '$' or explicit application when applying this interpreter. That is, you will need to write @runInterpret a f (runInterpret b g myPrgram)@ or @runInterpret a f $ runInterpret b g $ myProgram@. If you try and write @runInterpret a f . runInterpret b g@, you will unfortunately get a rather scary type error!
 runInterpret
