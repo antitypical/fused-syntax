@@ -57,7 +57,7 @@ instance ( RightModule sig
 
 instance Syntax sig
       => Algebra sig (Term sig) where
-  gen = Var
+  var = Var
   alg = Term
 
 
@@ -77,5 +77,5 @@ prjTerm = maybe empty pure . (prj <=< unTerm)
 
 iter :: Algebra sig m => Term sig a -> m a
 iter = \case
-  Var  a -> gen a
+  Var  a -> var a
   Term t -> alg (hmap iter t)

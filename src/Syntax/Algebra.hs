@@ -9,7 +9,7 @@ import Syntax.Functor
 import Syntax.Sum
 
 class (Syntax sig, Functor f) => Algebra sig f | f -> sig where
-  gen ::       a -> f a
+  var ::       a -> f a
   alg :: sig f a -> f a
 
 

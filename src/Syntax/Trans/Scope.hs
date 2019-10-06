@@ -69,7 +69,7 @@ abstractT :: (Functor (t f), Algebra sig f) => (b -> Maybe a) -> t f b -> ScopeT
 abstractT f = abstractVarT (fromMaybe f)
 
 abstractVarT :: (Functor (t f), Algebra sig f) => (b -> Var a c) -> t f b -> ScopeT a t f c
-abstractVarT f = ScopeT . fmap (fmap gen . f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
+abstractVarT f = ScopeT . fmap (fmap var . f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
 
 
 fromScopeT :: (RightModule t, Monad f) => ScopeT a t f b -> t f (Var a b)

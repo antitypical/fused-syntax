@@ -69,7 +69,7 @@ abstract :: Algebra sig f => (b -> Maybe a) -> f b -> Scope a f b
 abstract f = abstractVar (fromMaybe f)
 
 abstractVar :: Algebra sig f => (b -> Var a c) -> f b -> Scope a f c
-abstractVar f = Scope . fmap (fmap gen . f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
+abstractVar f = Scope . fmap (fmap var . f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
 
 
 fromScope :: Monad f => Scope a f b -> f (Var a b)
