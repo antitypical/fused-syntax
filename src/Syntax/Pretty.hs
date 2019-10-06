@@ -3,6 +3,8 @@ module Syntax.Pretty
   Prec(..)
 , atom
 , prec
+  -- * Conveniences
+, prettyParens
 ) where
 
 data Prec = Prec
@@ -16,3 +18,8 @@ atom = Prec Nothing
 
 prec :: Int -> String -> Prec
 prec = Prec . Just
+
+
+prettyParens :: Bool -> String -> String
+prettyParens True  s = "(" <> s <> ")"
+prettyParens False s = s
