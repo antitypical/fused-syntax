@@ -24,10 +24,7 @@ deriving instance (Ord  a, forall a . Eq   a => Eq   (f a)
 deriving instance (Show a, forall a . Show a => Show (f a))          => Show (Lam f a)
 
 instance HFunctor Lam
-instance Syntax   Lam where
-  weave state dist = \case
-    Abs b  -> Abs (weave state dist b)
-    f :$ a -> dist (f <$ state) :$ dist (a <$ state)
+instance Syntax   Lam
 
 instance RightModule Lam where
   Abs b  >>=* f = Abs (b >>=* f)

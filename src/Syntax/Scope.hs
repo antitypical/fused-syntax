@@ -14,7 +14,7 @@ module Syntax.Scope
 ) where
 
 import Control.Applicative (liftA2)
-import Control.Monad ((<=<), guard, join)
+import Control.Monad ((<=<), guard)
 import Control.Monad.Trans.Class
 import Data.Function (on)
 import GHC.Generics (Generic, Generic1)
@@ -32,8 +32,7 @@ unScope (Scope s) = s
 instance HFunctor (Scope a) where
   hmap f = Scope . f . fmap (fmap f) . unScope
 
-instance Syntax   (Scope a) where
-  weave state dist (Scope f) = Scope (fmap dist . sequenceA <$> dist (f <$ state))
+instance Syntax   (Scope a)
 
 instance (Eq   a, Eq   b, forall a . Eq   a => Eq   (f a), Monad f) => Eq   (Scope a f b) where
   (==) = (==) `on` fromScope
