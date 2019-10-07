@@ -1,0 +1,2 @@
+module Syntax.Fin
+() where

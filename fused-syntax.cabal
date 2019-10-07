@@ -38,6 +38,7 @@ library
   hs-source-dirs: src
   exposed-modules:
     Syntax.Algebra
+    Syntax.Fin
     Syntax.Functor
     Syntax.Module
     Syntax.Nat
