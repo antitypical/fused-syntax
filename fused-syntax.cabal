@@ -40,6 +40,7 @@ library
     Syntax.Algebra
     Syntax.Functor
     Syntax.Module
+    Syntax.Nat
     Syntax.Pretty
     Syntax.Scope
     Syntax.Stack
