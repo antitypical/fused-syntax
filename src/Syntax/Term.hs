@@ -12,7 +12,9 @@ import Control.Monad ((<=<), ap)
 import Syntax.Algebra
 import Syntax.Functor
 import Syntax.Module
+import Syntax.Scope
 import Syntax.Sum
+import Syntax.Var
 
 data Term sig a
   = Var a
@@ -55,6 +57,10 @@ instance ( HFunctor sig
       => Algebra sig (Term sig) where
   var = Var
   alg = Alg
+
+instance RightModule sig
+      => ScopeAlgebra sig (Term sig) where
+  instantiateVar f = unVar (f . B) (f . F =<<) <=< unScope
 
 
 hoistTerm

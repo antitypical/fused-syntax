@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric, DeriveTraversable, FlexibleContexts, LambdaCase, MultiParamTypeClasses, QuantifiedConstraints, StandaloneDeriving, TypeApplications #-}
+{-# LANGUAGE DeriveGeneric, DeriveTraversable, FlexibleContexts, LambdaCase, MultiParamTypeClasses, QuantifiedConstraints, StandaloneDeriving, TypeApplications, UndecidableInstances #-}
 module Example.Lam
 ( Lam(..)
 , lam
@@ -26,10 +26,10 @@ data Lam t a
 
 infixl 9 :$
 
-deriving instance (Eq   a, forall a . Eq   a => Eq   (f a), Monad f) => Eq   (Lam f a)
+deriving instance (Eq   a, forall a . Eq   a => Eq   (f a), ScopeAlgebra sig f) => Eq   (Lam f a)
 deriving instance (Ord  a, forall a . Eq   a => Eq   (f a)
-                         , forall a . Ord  a => Ord  (f a), Monad f) => Ord  (Lam f a)
-deriving instance (Show a, forall a . Show a => Show (f a))          => Show (Lam f a)
+                         , forall a . Ord  a => Ord  (f a), ScopeAlgebra sig f) => Ord  (Lam f a)
+deriving instance (Show a, forall a . Show a => Show (f a))                     => Show (Lam f a)
 
 instance HFunctor Lam
 
