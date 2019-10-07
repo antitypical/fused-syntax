@@ -41,7 +41,7 @@ instance RightModule Lam where
 lam :: (Eq a, Has Lam sig t) => a -> t a -> t a
 lam v b = term (Abs (abstract1 v b))
 
-unlam :: (Project Lam sig, RightModule sig, forall f . Functor f => Functor (sig f)) => a -> Term sig a -> Maybe (a, Term sig a)
+unlam :: (Project Lam sig, RightModule sig) => a -> Term sig a -> Maybe (a, Term sig a)
 unlam n t | Just (Abs b) <- prjTerm t = Just (n, instantiate1 (var n) b)
 unlam _ _                             = Nothing
 
