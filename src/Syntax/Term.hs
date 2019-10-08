@@ -8,6 +8,7 @@ module Syntax.Term
 ) where
 
 import Control.Applicative (Alternative(..))
+import Control.Effect.Carrier (Carrier(..))
 import Control.Monad ((<=<), ap)
 import Syntax.Algebra
 import Syntax.Functor
@@ -55,6 +56,10 @@ instance ( HFunctor sig
       => Algebra sig (Term sig) where
   var = Var
   alg = Alg
+
+instance RightModule sig
+      => Carrier sig (Term sig) where
+  eff = Alg
 
 
 hoistTerm
