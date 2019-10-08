@@ -18,7 +18,6 @@ import Control.Monad ((<=<), guard)
 import Control.Monad.Trans.Class
 import Data.Function (on)
 import GHC.Generics (Generic, Generic1)
-import Syntax.Algebra
 import Syntax.Functor
 import Syntax.Module
 import Syntax.Var
@@ -55,19 +54,19 @@ instance RightModule (Scope a) where
   Scope m >>=* f = Scope (fmap (>>= f) <$> m)
 
 
-toScope :: Algebra sig f => f (Var a b) -> Scope a f b
+toScope :: Applicative f => f (Var a b) -> Scope a f b
 toScope = abstractVar id
 
 
 -- | Bind occurrences of a variable in a term, producing a term in which the variable is bound.
-abstract1 :: (Algebra sig f, Eq a) => a -> f a -> Scope () f a
+abstract1 :: (Applicative f, Eq a) => a -> f a -> Scope () f a
 abstract1 n = abstract (guard . (== n))
 
-abstract :: Algebra sig f => (b -> Maybe a) -> f b -> Scope a f b
+abstract :: Applicative f => (b -> Maybe a) -> f b -> Scope a f b
 abstract f = abstractVar (fromMaybe f)
 
-abstractVar :: Algebra sig f => (b -> Var a c) -> f b -> Scope a f c
-abstractVar f = Scope . fmap (fmap var . f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
+abstractVar :: Applicative f => (b -> Var a c) -> f b -> Scope a f c
+abstractVar f = Scope . fmap (fmap pure . f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
 
 
 fromScope :: Monad f => Scope a f b -> f (Var a b)
