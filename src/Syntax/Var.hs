@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric, DeriveTraversable, LambdaCase #-}
+{-# LANGUAGE DataKinds, DeriveGeneric, DeriveTraversable, LambdaCase #-}
 module Syntax.Var
 ( -- * Variables
   Var(..)
@@ -9,12 +9,15 @@ module Syntax.Var
 , fromEither
 , fromMaybe
 , closed
+, strengthen
 ) where
 
 import Data.Bifoldable
 import Data.Bifunctor
 import Data.Bitraversable
 import GHC.Generics (Generic, Generic1)
+import Syntax.Fin hiding (strengthen)
+import Syntax.Nat
 
 data Var a b
   = B a
@@ -62,3 +65,7 @@ fromMaybe f a = maybe (F a) B (f a)
 
 closed :: Traversable f => f a -> Maybe (f b)
 closed = traverse (const Nothing)
+
+
+strengthen :: Functor f => f (Var (Fin 'Z) a) -> f a
+strengthen = fmap (unVar absurd id)
