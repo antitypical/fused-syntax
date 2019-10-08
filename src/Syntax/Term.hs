@@ -17,7 +17,6 @@ import Syntax.Algebra
 import Syntax.Fin
 import Syntax.Functor
 import Syntax.Module
-import Syntax.Pretty
 import Syntax.Sum
 import Syntax.Var
 import Syntax.Vec
@@ -99,21 +98,21 @@ iter = \case
 prettyTerm
   :: (forall g . Foldable g => Foldable (sig g), RightModule sig)
   => (a -> doc)
-  -> (forall f n . (Foldable f, Monad f) => (forall n . Vec n doc -> f (Var (Fin n) a) -> Prec doc) -> Vec n doc -> sig f (Var (Fin n) a) -> Prec doc)
+  -> (forall f n . (Foldable f, Monad f) => (forall n . Vec n doc -> f (Var (Fin n) a) -> doc) -> Vec n doc -> sig f (Var (Fin n) a) -> doc)
   -> Term sig a
   -> doc
-prettyTerm var alg = unPrec . prettyTermInContext var alg VZ . fmap F
+prettyTerm var alg = prettyTermInContext var alg VZ . fmap F
 
 prettyTermInContext
   :: forall sig n a doc
   .  (forall g . Foldable g => Foldable (sig g), RightModule sig)
   => (a -> doc)
-  -> (forall f n . (Foldable f, Monad f) => (forall n . Vec n doc -> f (Var (Fin n) a) -> Prec doc) -> Vec n doc -> sig f (Var (Fin n) a) -> Prec doc)
+  -> (forall f n . (Foldable f, Monad f) => (forall n . Vec n doc -> f (Var (Fin n) a) -> doc) -> Vec n doc -> sig f (Var (Fin n) a) -> doc)
   -> Vec n doc
   -> Term sig (Var (Fin n) a)
-  -> Prec doc
+  -> doc
 prettyTermInContext var alg = go where
-  go :: forall n . Vec n doc -> Term sig (Var (Fin n) a) -> Prec doc
+  go :: forall n . Vec n doc -> Term sig (Var (Fin n) a) -> doc
   go ctx = \case
-    Var v -> atom (unVar (ctx !) var v)
+    Var v -> unVar (ctx !) var v
     Alg t -> alg go ctx t
