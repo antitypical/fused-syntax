@@ -6,8 +6,8 @@ module Syntax.Term
 , prjTerm
 , iter
   -- * Pretty-printing
-, prettyTerm
-, prettyTermInContext
+, foldTerm
+, foldTermInContext
 ) where
 
 import Control.Applicative (Alternative(..))
@@ -95,22 +95,22 @@ iter = \case
   Alg t -> alg (hmap iter t)
 
 
-prettyTerm
+foldTerm
   :: (forall g . Functor g => Functor (sig g))
   => (a -> doc)
   -> (forall n . (forall n . Vec n doc -> Term sig (Var (Fin n) a) -> doc) -> Vec n doc -> sig (Term sig) (Var (Fin n) a) -> doc)
   -> Term sig a
   -> doc
-prettyTerm var alg = prettyTermInContext var alg VZ . fmap F
+foldTerm var alg = foldTermInContext var alg VZ . fmap F
 
-prettyTermInContext
+foldTermInContext
   :: forall sig n a doc
   .  (a -> doc)
   -> (forall n . (forall n . Vec n doc -> Term sig (Var (Fin n) a) -> doc) -> Vec n doc -> sig (Term sig) (Var (Fin n) a) -> doc)
   -> Vec n doc
   -> Term sig (Var (Fin n) a)
   -> doc
-prettyTermInContext var alg = go where
+foldTermInContext var alg = go where
   go :: forall n . Vec n doc -> Term sig (Var (Fin n) a) -> doc
   go ctx = \case
     Var v -> unVar (ctx !) var v
