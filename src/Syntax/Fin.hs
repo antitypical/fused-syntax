@@ -6,7 +6,7 @@ module Syntax.Fin
 import Syntax.Nat
 
 data Fin (n :: Nat) where
-  FZ :: Fin n
+  FZ :: Fin ('S n)
   FS :: Fin n -> Fin ('S n)
 
 deriving instance Eq   (Fin n)
