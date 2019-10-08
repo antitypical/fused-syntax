@@ -2,6 +2,7 @@
 module Syntax.Fin
 ( Fin(..)
 , absurd
+, toNum
 ) where
 
 import Syntax.Nat
@@ -16,3 +17,7 @@ deriving instance Show (Fin n)
 
 absurd :: Fin 'Z -> a
 absurd v = case v of {}
+
+toNum :: Num a => Fin n -> a
+toNum FZ     = 0
+toNum (FS n) = 1 + toNum n
