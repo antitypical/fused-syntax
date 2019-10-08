@@ -18,7 +18,6 @@ import Control.Monad (guard)
 import Control.Monad.Trans.Class
 import Data.Function (on)
 import GHC.Generics (Generic, Generic1)
-import Syntax.Algebra
 import Syntax.Functor
 import Syntax.Module
 import Syntax.Var
@@ -57,19 +56,19 @@ instance (HFunctor t, forall g . Functor g => Functor (t g)) => RightModule (Sco
   ScopeT s >>=* k = ScopeT (fmap (>>= k) <$> s)
 
 
-toScopeT :: (Functor (t f), Algebra sig f) => t f (Var a b) -> ScopeT a t f b
+toScopeT :: (Functor (t f), Applicative f) => t f (Var a b) -> ScopeT a t f b
 toScopeT = abstractVarT id
 
 
 -- | Bind occurrences of a variable in a term, producing a term in which the variable is bound.
-abstract1T :: (Functor (t f), Algebra sig f, Eq a) => a -> t f a -> ScopeT () t f a
+abstract1T :: (Functor (t f), Applicative f, Eq a) => a -> t f a -> ScopeT () t f a
 abstract1T n = abstractT (guard . (== n))
 
-abstractT :: (Functor (t f), Algebra sig f) => (b -> Maybe a) -> t f b -> ScopeT a t f b
+abstractT :: (Functor (t f), Applicative f) => (b -> Maybe a) -> t f b -> ScopeT a t f b
 abstractT f = abstractVarT (fromMaybe f)
 
-abstractVarT :: (Functor (t f), Algebra sig f) => (b -> Var a c) -> t f b -> ScopeT a t f c
-abstractVarT f = ScopeT . fmap (fmap var . f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
+abstractVarT :: (Functor (t f), Applicative f) => (b -> Var a c) -> t f b -> ScopeT a t f c
+abstractVarT f = ScopeT . fmap (fmap pure . f) -- FIXME: succ as little of the expression as possible, cf https://twitter.com/ollfredo/status/1145776391826358273
 
 
 fromScopeT :: (RightModule t, Monad f) => ScopeT a t f b -> t f (Var a b)

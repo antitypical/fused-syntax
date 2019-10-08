@@ -8,6 +8,7 @@ module Syntax.Term
 ) where
 
 import Control.Applicative (Alternative(..))
+import Control.Effect.Carrier (Carrier(..))
 import Control.Monad ((<=<), ap)
 import Syntax.Algebra
 import Syntax.Functor
@@ -20,13 +21,11 @@ data Term sig a
 
 deriving instance ( Eq a
                   , RightModule sig
-                  , forall f . Functor f => Functor (sig f)
                   , forall g x . (Eq  x, Monad g, forall y . Eq  y => Eq  (g y)) => Eq  (sig g x)
                   )
                => Eq  (Term sig a)
 deriving instance ( Ord a
                   , RightModule sig
-                  , forall f . Functor f => Functor (sig f)
                   , forall g x . (Eq  x, Monad g, forall y . Eq  y => Eq  (g y)) => Eq  (sig g x)
                   , forall g x . (Ord x, Monad g, forall y . Eq  y => Eq  (g y)
                                                 , forall y . Ord y => Ord (g y)) => Ord (sig g x)
@@ -40,16 +39,12 @@ deriving instance ( forall g . Foldable    g => Foldable    (sig g)
                   , forall g . Functor     g => Functor     (sig g)
                   , forall g . Traversable g => Traversable (sig g)) => Traversable (Term sig)
 
-instance ( RightModule sig
-         , forall f . Functor f => Functor (sig f)
-         )
+instance RightModule sig
       => Applicative (Term sig) where
   pure = Var
   (<*>) = ap
 
-instance ( RightModule sig
-         , forall f . Functor f => Functor (sig f)
-         )
+instance RightModule sig
       => Monad (Term sig) where
   Var a >>= f = f a
   Alg t >>= f = Alg (t >>=* f)
@@ -61,6 +56,10 @@ instance ( HFunctor sig
       => Algebra sig (Term sig) where
   var = Var
   alg = Alg
+
+instance RightModule sig
+      => Carrier sig (Term sig) where
+  eff = Alg
 
 
 hoistTerm
