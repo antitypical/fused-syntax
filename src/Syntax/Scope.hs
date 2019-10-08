@@ -3,11 +3,11 @@ module Syntax.Scope
 ( -- * Scopes
   Scope(..)
 , unScope
-, fromScope
 , toScope
 , abstract1
 , abstract
 , abstractVar
+, fromScope
 , instantiate1
 , instantiate
 , instantiateVar
