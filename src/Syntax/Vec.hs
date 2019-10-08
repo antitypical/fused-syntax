@@ -1,4 +1,4 @@
-{-# LANGUAGE DataKinds, GADTs, KindSignatures, StandaloneDeriving #-}
+{-# LANGUAGE DataKinds, DeriveTraversable, GADTs, KindSignatures, StandaloneDeriving #-}
 module Syntax.Vec
 ( Vec(..)
 ) where
@@ -14,3 +14,7 @@ infixr 5 :#
 deriving instance Eq   a => Eq   (Vec n a)
 deriving instance Ord  a => Ord  (Vec n a)
 deriving instance Show a => Show (Vec n a)
+
+deriving instance Foldable    (Vec n)
+deriving instance Functor     (Vec n)
+deriving instance Traversable (Vec n)
