@@ -17,6 +17,9 @@ data Prec a = Prec
   }
   deriving (Eq, Ord, Show)
 
+instance IsString a => IsString (Prec a) where
+  fromString = atom . fromString
+
 -- | A document that never requires parentheses by itself, e.g. one representing a variable or numeric literal.
 atom :: a -> Prec a
 atom = Prec Nothing
