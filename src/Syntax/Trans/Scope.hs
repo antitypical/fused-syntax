@@ -1,15 +1,17 @@
-{-# LANGUAGE DeriveGeneric, DeriveTraversable, LambdaCase, QuantifiedConstraints, StandaloneDeriving #-}
+{-# LANGUAGE DataKinds, DeriveGeneric, DeriveTraversable, LambdaCase, QuantifiedConstraints, StandaloneDeriving #-}
 module Syntax.Trans.Scope
 ( -- * Scope transformers
   ScopeT(..)
 , unScopeT
   -- * Abstraction
 , toScopeT
+, toScopeFinT
 , abstract1T
 , abstractT
 , abstractVarT
   -- * Instantiation
 , fromScopeT
+, fromScopeFinT
 , instantiate1T
 , instantiateT
 , instantiateVarT
@@ -18,10 +20,13 @@ module Syntax.Trans.Scope
 import Control.Applicative (liftA2)
 import Control.Monad (guard)
 import Control.Monad.Trans.Class
+import Data.Bifunctor (first)
 import Data.Function (on)
 import GHC.Generics (Generic, Generic1)
+import Syntax.Fin as Fin
 import Syntax.Functor
 import Syntax.Module
+import Syntax.Nat
 import Syntax.Var
 
 -- | Like 'Scope', but allows the inner functor to vary. Useful for syntax like declaration scopes, case alternatives, etc., which can bind variables, but cannot (directly) consist solely of them.
@@ -61,6 +66,9 @@ instance (HFunctor t, forall g . Functor g => Functor (t g)) => RightModule (Sco
 toScopeT :: (Functor (t f), Applicative f) => t f (Var a b) -> ScopeT a t f b
 toScopeT = abstractVarT id
 
+toScopeFinT :: (Functor (t f), Applicative f) => t f (Var (Fin ('S n)) b) -> ScopeT () t f (Var (Fin n) b)
+toScopeFinT = abstractVarT (unVar (maybe (B ()) (F . B) . Fin.strengthen) (F . F))
+
 
 -- | Bind occurrences of a variable in a term, producing a term in which the variable is bound.
 abstract1T :: (Functor (t f), Applicative f, Eq a) => a -> t f a -> ScopeT () t f a
@@ -75,6 +83,9 @@ abstractVarT f = ScopeT . fmap (fmap pure . f) -- FIXME: succ as little of the e
 
 fromScopeT :: (RightModule t, Monad f) => ScopeT a t f b -> t f (Var a b)
 fromScopeT = instantiateVarT pure
+
+fromScopeFinT :: (RightModule t, Monad f) => ScopeT () t f (Var (Fin n) b) -> t f (Var (Fin ('S n)) b)
+fromScopeFinT = instantiateVarT (unVar (const (pure (B FZ))) (pure . first FS))
 
 
 -- | Substitute a term for the free variable in a given term, producing a closed term.
