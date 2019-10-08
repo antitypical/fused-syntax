@@ -49,6 +49,7 @@ library
     Syntax.Term
     Syntax.Trans.Scope
     Syntax.Var
+    Syntax.Vec
   other-modules:
     Example.Lam
   build-depends:
