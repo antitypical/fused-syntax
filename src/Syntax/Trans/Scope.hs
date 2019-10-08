@@ -3,10 +3,12 @@ module Syntax.Trans.Scope
 ( -- * Scope transformers
   ScopeT(..)
 , unScopeT
+  -- * Abstraction
 , toScopeT
 , abstract1T
 , abstractT
 , abstractVarT
+  -- * Instantiation
 , fromScopeT
 , instantiate1T
 , instantiateT
