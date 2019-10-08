@@ -96,18 +96,17 @@ iter = \case
 
 
 prettyTerm
-  :: (forall g . Foldable g => Foldable (sig g), RightModule sig)
+  :: (forall g . Functor g => Functor (sig g))
   => (a -> doc)
-  -> (forall f n . (Foldable f, Monad f) => (forall n . Vec n doc -> f (Var (Fin n) a) -> doc) -> Vec n doc -> sig f (Var (Fin n) a) -> doc)
+  -> (forall n . (forall n . Vec n doc -> Term sig (Var (Fin n) a) -> doc) -> Vec n doc -> sig (Term sig) (Var (Fin n) a) -> doc)
   -> Term sig a
   -> doc
 prettyTerm var alg = prettyTermInContext var alg VZ . fmap F
 
 prettyTermInContext
   :: forall sig n a doc
-  .  (forall g . Foldable g => Foldable (sig g), RightModule sig)
-  => (a -> doc)
-  -> (forall f n . (Foldable f, Monad f) => (forall n . Vec n doc -> f (Var (Fin n) a) -> doc) -> Vec n doc -> sig f (Var (Fin n) a) -> doc)
+  .  (a -> doc)
+  -> (forall n . (forall n . Vec n doc -> Term sig (Var (Fin n) a) -> doc) -> Vec n doc -> sig (Term sig) (Var (Fin n) a) -> doc)
   -> Vec n doc
   -> Term sig (Var (Fin n) a)
   -> doc
