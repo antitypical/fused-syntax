@@ -17,7 +17,6 @@ import Data.Bifunctor
 import Data.Bitraversable
 import GHC.Generics (Generic, Generic1)
 import Syntax.Fin hiding (strengthen)
-import Syntax.Nat
 
 data Var a b
   = B a

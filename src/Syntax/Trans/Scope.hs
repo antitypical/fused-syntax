@@ -26,7 +26,6 @@ import GHC.Generics (Generic, Generic1)
 import Syntax.Fin as Fin
 import Syntax.Functor
 import Syntax.Module
-import Syntax.Nat
 import Syntax.Var
 
 -- | Like 'Scope', but allows the inner functor to vary. Useful for syntax like declaration scopes, case alternatives, etc., which can bind variables, but cannot (directly) consist solely of them.

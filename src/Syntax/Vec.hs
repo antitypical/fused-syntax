@@ -5,7 +5,6 @@ module Syntax.Vec
 ) where
 
 import Syntax.Fin
-import Syntax.Nat
 
 data Vec (n :: Nat) a where
   VZ :: Vec 'Z a

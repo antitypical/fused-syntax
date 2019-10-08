@@ -26,7 +26,6 @@ import GHC.Generics (Generic, Generic1)
 import Syntax.Fin as Fin
 import Syntax.Functor
 import Syntax.Module
-import Syntax.Nat
 import Syntax.Var
 
 newtype Scope a f b = Scope (f (Var a (f b)))

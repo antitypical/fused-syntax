@@ -1,9 +1,12 @@
 {-# LANGUAGE DataKinds, EmptyCase, GADTs, KindSignatures, StandaloneDeriving #-}
 module Syntax.Fin
-( Fin(..)
+( -- * Finite sets
+  Fin(..)
 , absurd
 , toNum
 , strengthen
+  -- * Nat
+, Nat(..)
 ) where
 
 import Syntax.Nat
