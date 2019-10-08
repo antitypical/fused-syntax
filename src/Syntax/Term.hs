@@ -95,14 +95,14 @@ iter = \case
 
 
 foldTerm
-  :: forall sig n a res
-  .  (forall n . Vec n res -> Var (Fin n) a -> res)
-  -> (forall n . (forall n . Vec n res -> Term sig (Var (Fin n) a) -> res) -> Vec n res -> sig (Term sig) (Var (Fin n) a) -> res)
-  -> Vec n res
+  :: forall sig n a var res
+  .  (forall n . Vec n var -> Var (Fin n) a -> res)
+  -> (forall n . (forall n . Vec n var -> Term sig (Var (Fin n) a) -> res) -> Vec n var -> sig (Term sig) (Var (Fin n) a) -> res)
+  -> Vec n var
   -> Term sig (Var (Fin n) a)
   -> res
 foldTerm var alg = go where
-  go :: forall n . Vec n res -> Term sig (Var (Fin n) a) -> res
+  go :: forall n . Vec n var -> Term sig (Var (Fin n) a) -> res
   go ctx = \case
     Var v -> var    ctx v
     Alg t -> alg go ctx t
