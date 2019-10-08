@@ -38,8 +38,10 @@ library
   hs-source-dirs: src
   exposed-modules:
     Syntax.Algebra
+    Syntax.Fin
     Syntax.Functor
     Syntax.Module
+    Syntax.Nat
     Syntax.Pretty
     Syntax.Scope
     Syntax.Stack
@@ -47,6 +49,7 @@ library
     Syntax.Term
     Syntax.Trans.Scope
     Syntax.Var
+    Syntax.Vec
   other-modules:
     Example.Lam
   build-depends:

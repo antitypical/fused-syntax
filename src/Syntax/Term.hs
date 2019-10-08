@@ -5,15 +5,21 @@ module Syntax.Term
 , unTerm
 , prjTerm
 , iter
+  -- * Pretty-printing
+, prettyTerm
+, prettyTermInContext
 ) where
 
 import Control.Applicative (Alternative(..))
 import Control.Effect.Carrier (Carrier(..))
 import Control.Monad ((<=<), ap)
 import Syntax.Algebra
+import Syntax.Fin
 import Syntax.Functor
 import Syntax.Module
 import Syntax.Sum
+import Syntax.Var
+import Syntax.Vec
 
 data Term sig a
   = Var a
@@ -87,3 +93,25 @@ iter :: Algebra sig m => Term sig a -> m a
 iter = \case
   Var a -> var a
   Alg t -> alg (hmap iter t)
+
+
+prettyTerm
+  :: (forall g . Functor g => Functor (sig g))
+  => (a -> doc)
+  -> (forall n . (forall n . Vec n doc -> Term sig (Var (Fin n) a) -> doc) -> Vec n doc -> sig (Term sig) (Var (Fin n) a) -> doc)
+  -> Term sig a
+  -> doc
+prettyTerm var alg = prettyTermInContext var alg VZ . fmap F
+
+prettyTermInContext
+  :: forall sig n a doc
+  .  (a -> doc)
+  -> (forall n . (forall n . Vec n doc -> Term sig (Var (Fin n) a) -> doc) -> Vec n doc -> sig (Term sig) (Var (Fin n) a) -> doc)
+  -> Vec n doc
+  -> Term sig (Var (Fin n) a)
+  -> doc
+prettyTermInContext var alg = go where
+  go :: forall n . Vec n doc -> Term sig (Var (Fin n) a) -> doc
+  go ctx = \case
+    Var v -> unVar (ctx !) var v
+    Alg t -> alg go ctx t
