@@ -96,7 +96,7 @@ iter = \case
 
 foldTerm
   :: forall sig n a res
-  .  (a -> res)
+  .  (forall n . Vec n res -> Var (Fin n) a -> res)
   -> (forall n . (forall n . Vec n res -> Term sig (Var (Fin n) a) -> res) -> Vec n res -> sig (Term sig) (Var (Fin n) a) -> res)
   -> Vec n res
   -> Term sig (Var (Fin n) a)
@@ -104,5 +104,5 @@ foldTerm
 foldTerm var alg = go where
   go :: forall n . Vec n res -> Term sig (Var (Fin n) a) -> res
   go ctx = \case
-    Var v -> unVar (ctx !) var v
+    Var v -> var    ctx v
     Alg t -> alg go ctx t
