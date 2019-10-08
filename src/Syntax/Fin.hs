@@ -3,6 +3,7 @@ module Syntax.Fin
 ( Fin(..)
 , absurd
 , toNum
+, strengthen
 ) where
 
 import Syntax.Nat
@@ -21,3 +22,7 @@ absurd v = case v of {}
 toNum :: Num a => Fin n -> a
 toNum FZ     = 0
 toNum (FS n) = 1 + toNum n
+
+strengthen :: Fin ('S n) -> Maybe (Fin n)
+strengthen FZ     = Nothing
+strengthen (FS n) = Just n
