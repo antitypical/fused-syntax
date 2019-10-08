@@ -1,13 +1,15 @@
-{-# LANGUAGE DeriveGeneric, DeriveTraversable, FlexibleInstances, LambdaCase, MultiParamTypeClasses, QuantifiedConstraints, StandaloneDeriving, UndecidableInstances #-}
+{-# LANGUAGE DataKinds, DeriveGeneric, DeriveTraversable, FlexibleInstances, LambdaCase, MultiParamTypeClasses, QuantifiedConstraints, StandaloneDeriving, UndecidableInstances #-}
 module Syntax.Scope
 ( -- * Scopes
   Scope(..)
 , unScope
 , toScope
+, toScopeFin
 , abstract1
 , abstract
 , abstractVar
 , fromScope
+, fromScopeFin
 , instantiate1
 , instantiate
 , instantiateVar
@@ -16,8 +18,11 @@ module Syntax.Scope
 import Control.Applicative (liftA2)
 import Control.Monad ((<=<), guard)
 import Control.Monad.Trans.Class
+import Data.Bifunctor (first)
 import Data.Function (on)
 import GHC.Generics (Generic, Generic1)
+import Syntax.Fin as Fin
+import Syntax.Nat
 import Syntax.Functor
 import Syntax.Module
 import Syntax.Var
@@ -57,6 +62,9 @@ instance RightModule (Scope a) where
 toScope :: Applicative f => f (Var a b) -> Scope a f b
 toScope = abstractVar id
 
+toScopeFin :: Applicative f => f (Var (Fin ('S n)) b) -> Scope () f (Var (Fin n) b)
+toScopeFin = abstractVar (unVar (maybe (B ()) (F . B) . Fin.strengthen) (F . F))
+
 
 -- | Bind occurrences of a variable in a term, producing a term in which the variable is bound.
 abstract1 :: (Applicative f, Eq a) => a -> f a -> Scope () f a
@@ -71,6 +79,9 @@ abstractVar f = Scope . fmap (fmap pure . f) -- FIXME: succ as little of the exp
 
 fromScope :: Monad f => Scope a f b -> f (Var a b)
 fromScope = instantiateVar pure
+
+fromScopeFin :: Monad f => Scope () f (Var (Fin n) b) -> f (Var (Fin ('S n)) b)
+fromScopeFin = instantiateVar (unVar (const (pure (B FZ))) (pure . first FS))
 
 
 -- | Substitute a term for the free variable in a given term, producing a closed term.
