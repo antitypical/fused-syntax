@@ -35,10 +35,10 @@ instance RightModule Lam where
   g :$ a >>=* f = (g >>= f) :$ (a >>= f)
 
 
-lam :: (Applicative t, Eq a, Has Lam sig t) => a -> t a -> t a
+lam :: (Applicative t, Eq a, Elem Lam sig t) => a -> t a -> t a
 lam v b = term (Abs (abstract1 v b))
 
-($$) :: Has Lam sig t => t a -> t a -> t a
+($$) :: Elem Lam sig t => t a -> t a -> t a
 f $$ a = term (f :$ a)
 
 infixl 9 $$

@@ -1,7 +1,7 @@
 {-# LANGUAGE ConstraintKinds, FunctionalDependencies, QuantifiedConstraints #-}
 module Syntax.Algebra
 ( Algebra(..)
-, Has
+, Elem
 , term
 ) where
 
@@ -13,7 +13,7 @@ class (forall f . Functor f => Functor (sig f), HFunctor sig, Functor f) => Alge
   alg :: sig f a -> f a
 
 
-type Has syn sig t = (Inject syn sig, Algebra sig t)
+type Elem syn sig t = (Inject syn sig, Algebra sig t)
 
-term :: Has syn sig t => syn t a -> t a
+term :: Elem syn sig t => syn t a -> t a
 term = alg . inj
