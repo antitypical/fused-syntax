@@ -7,8 +7,8 @@ module Example.Lam
 , PrettyC(..)
 ) where
 
-import Control.Effect.Pure
-import Control.Effect.Reader
+import Control.Carrier.Pure
+import Control.Carrier.Reader
 import GHC.Generics (Generic1)
 import Syntax.Algebra
 import Syntax.Functor
