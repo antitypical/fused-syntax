@@ -9,10 +9,9 @@ module Syntax.Term
 , foldTerm
 ) where
 
+import Control.Algebra (Algebra(..), Effect(..))
 import Control.Applicative (Alternative(..))
-import Control.Carrier (Carrier(..))
 import Control.Monad ((<=<), ap)
-import Syntax.Algebra
 import Syntax.Fin
 import Syntax.Functor
 import Syntax.Module
@@ -54,22 +53,15 @@ instance RightModule sig
   Var a >>= f = f a
   Alg t >>= f = Alg (t >>=* f)
 
-
-instance ( HFunctor sig
-         , forall f . Functor f => Functor (sig f)
-         )
+instance (Effect sig, RightModule sig)
       => Algebra sig (Term sig) where
-  var = Var
   alg = Alg
-
-instance RightModule sig
-      => Carrier sig (Term sig) where
-  eff = Alg
 
 
 hoistTerm
   :: forall sig sig' a
-  .  ( HFunctor sig
+  .  ( RightModule sig
+     , RightModule sig'
      )
   => (forall m x . sig m x -> sig' m x)
   -> (Term sig a -> Term sig' a)
@@ -87,9 +79,9 @@ prjTerm :: (Alternative m, Project sub sig) => Term sig a -> m (sub (Term sig) a
 prjTerm = maybe empty pure . (prj <=< unTerm)
 
 
-iter :: Algebra sig m => Term sig a -> m a
+iter :: (Algebra sig m, RightModule sig) => Term sig a -> m a
 iter = \case
-  Var a -> var a
+  Var a -> pure a
   Alg t -> alg (hmap iter t)
 
 
