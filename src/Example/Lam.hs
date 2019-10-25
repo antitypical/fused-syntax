@@ -5,8 +5,8 @@ module Example.Lam
 , ($$)
 ) where
 
+import Control.Algebra
 import GHC.Generics (Generic1)
-import Syntax.Algebra
 import Syntax.Functor
 import Syntax.Module
 import Syntax.Scope
@@ -30,10 +30,10 @@ instance RightModule Lam where
   g :$ a >>=* f = (g >>= f) :$ (a >>= f)
 
 
-lam :: (Applicative t, Eq a, Elem Lam sig t) => a -> t a -> t a
-lam v b = term (Abs (abstract1 v b))
+lam :: (Eq a, Has Lam sig t) => a -> t a -> t a
+lam v b = send (Abs (abstract1 v b))
 
-($$) :: Elem Lam sig t => t a -> t a -> t a
-f $$ a = term (f :$ a)
+($$) :: Has Lam sig t => t a -> t a -> t a
+f $$ a = send (f :$ a)
 
 infixl 9 $$
