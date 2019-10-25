@@ -70,7 +70,6 @@ instance RightModule sig
 hoistTerm
   :: forall sig sig' a
   .  ( HFunctor sig
-     , forall g . Functor g => Functor (sig g)
      )
   => (forall m x . sig m x -> sig' m x)
   -> (Term sig a -> Term sig' a)

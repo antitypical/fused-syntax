@@ -39,7 +39,7 @@ import Syntax.Sum
 -- @
 -- m >>=* (k >=> h) = (m >>=* k) >>=* h
 -- @
-class (forall g . Functor g => Functor (f g), HFunctor f) => RightModule f where
+class HFunctor f => RightModule f where
   (>>=*) :: Monad m => f m a -> (a -> m b) -> f m b
   default (>>=*) :: (Monad m, MonadTrans f, Monad (f m)) => f m a -> (a -> m b) -> f m b
   m >>=* f = m >>= lift . f
@@ -77,7 +77,7 @@ instance (RightModule f, RightModule g) => RightModule (f :+: g) where
   R r >>=* f = R (r >>=* f)
 
 
-class (forall g . Functor g => Functor (f g), HFunctor f) => LeftModule f where
+class HFunctor f => LeftModule f where
   (*>>=) :: Monad m => m a -> (a -> f m b) -> f m b
   default (*>>=) :: (Monad m, MonadTrans f, Monad (f m)) => m a -> (a -> f m b) -> f m b
   m *>>= f = lift m >>= f
