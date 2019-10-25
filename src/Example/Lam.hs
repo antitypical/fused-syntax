@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric, DeriveTraversable, FlexibleContexts, LambdaCase, MultiParamTypeClasses, QuantifiedConstraints, StandaloneDeriving, TypeApplications #-}
+{-# LANGUAGE ConstraintKinds, DeriveGeneric, DeriveTraversable, FlexibleContexts, LambdaCase, QuantifiedConstraints, StandaloneDeriving, TypeFamilies #-}
 module Example.Lam
 ( Lam(..)
 , lam
@@ -24,6 +24,11 @@ deriving instance (Ord  a, forall a . Eq   a => Eq   (f a)
 deriving instance (Show a, forall a . Show a => Show (f a))          => Show (Lam f a)
 
 instance HFunctor Lam
+instance Effect Lam where
+  type CanHandle Lam ctx = Traversable ctx
+  handle ctx dst = \case
+    Abs s -> Abs (handle ctx dst s)
+    f :$ a -> dst (f <$ ctx) :$ dst (a <$ ctx)
 
 instance RightModule Lam where
   Abs b  >>=* f = Abs (b >>=* f)
