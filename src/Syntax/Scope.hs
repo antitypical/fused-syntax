@@ -1,4 +1,4 @@
-{-# LANGUAGE DataKinds, DeriveGeneric, DeriveTraversable, FlexibleInstances, LambdaCase, MultiParamTypeClasses, QuantifiedConstraints, StandaloneDeriving, UndecidableInstances #-}
+{-# LANGUAGE DataKinds, DeriveGeneric, DeriveTraversable, FlexibleInstances, LambdaCase, MultiParamTypeClasses, QuantifiedConstraints, StandaloneDeriving, TypeFamilies, UndecidableInstances #-}
 module Syntax.Scope
 ( -- * Scopes
   Scope(..)
@@ -17,6 +17,7 @@ module Syntax.Scope
 , instantiateVar
 ) where
 
+import Control.Algebra (Effect(..))
 import Control.Applicative (liftA2)
 import Control.Monad ((<=<), guard)
 import Control.Monad.Trans.Class
@@ -36,6 +37,10 @@ unScope (Scope s) = s
 
 instance HFunctor (Scope a) where
   hmap f = Scope . f . fmap (fmap f) . unScope
+
+instance Effect (Scope a) where
+  type CanHandle (Scope a) ctx = Traversable ctx
+  handle ctx dst = toScope . fmap sequenceA . dst . (<$ ctx) . fromScope
 
 instance (Eq  a, Eq  b, forall a . Eq  a => Eq  (f a), Monad f) => Eq  (Scope a f b) where
   (==) = (==) `on` fromScope
