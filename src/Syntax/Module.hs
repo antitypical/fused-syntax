@@ -75,9 +75,7 @@ joinr :: (RightModule f, Monad m) => f m (m a) -> f m a
 joinr = (>>=* id)
 
 
-instance (RightModule f, RightModule g) => RightModule (f Sum.:+: g) where
-  Sum.L l >>=* f = Sum.L (l >>=* f)
-  Sum.R r >>=* f = Sum.R (r >>=* f)
+instance (RightModule f, RightModule g) => RightModule (f Sum.:+: g)
 
 
 class HFunctor f => LeftModule f where
