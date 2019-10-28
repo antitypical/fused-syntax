@@ -14,7 +14,7 @@ class (forall f . Functor f => Functor (syn f)) => HFunctor syn where
     -> syn m a
     -> syn n a
   default hmap
-    :: (Monad m, Monad n, Effect syn)
+    :: (Monad m, Monad n, Effect c syn)
     => (forall a . m a -> n a)
     -> syn m a
     -> syn n a

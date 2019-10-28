@@ -53,7 +53,7 @@ instance RightModule sig
   Var a >>= f = f a
   Alg t >>= f = Alg (t >>=* f)
 
-instance (Effect sig, RightModule sig)
+instance (Effect c sig, RightModule sig)
       => Algebra sig (Term sig) where
   alg = Alg
 
