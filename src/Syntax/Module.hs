@@ -120,3 +120,7 @@ deriving instance GRightModule m f => GRightModule m (M1 i c f)
 
 instance (GRightModule m l, GRightModule m r) => GRightModule m (l :*: r) where
   gbindR (l :*: r) k = gbindR l k :*: gbindR r k
+
+instance (GRightModule m l, GRightModule m r) => GRightModule m (l :+: r) where
+  gbindR (L1 l) k = L1 (gbindR l k)
+  gbindR (R1 r) k = R1 (gbindR r k)
