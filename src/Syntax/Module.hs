@@ -1,4 +1,4 @@
-{-# LANGUAGE DefaultSignatures, FlexibleContexts, FlexibleInstances, FunctionalDependencies, GeneralizedNewtypeDeriving, QuantifiedConstraints, StandaloneDeriving, TypeOperators, UndecidableInstances #-}
+{-# LANGUAGE DefaultSignatures, FlexibleContexts, FlexibleInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, QuantifiedConstraints, StandaloneDeriving, TypeOperators, UndecidableInstances #-}
 module Syntax.Module
 ( -- * Right modules
   RightModule(..)
@@ -113,7 +113,7 @@ joinl :: (LeftModule f, Monad m) => m (f m a) -> f m a
 joinl = (*>>= id)
 
 
-class Monad m => GRightModule m f | f -> m where
+class Monad m => GRightModule m f where
   gbindR :: f a -> (a -> m b) -> f b
 
 deriving instance GRightModule m f => GRightModule m (M1 i c f)
