@@ -117,3 +117,6 @@ class Monad m => GRightModule m f | f -> m where
   gbindR :: f a -> (a -> m b) -> f b
 
 deriving instance GRightModule m f => GRightModule m (M1 i c f)
+
+instance (GRightModule m l, GRightModule m r) => GRightModule m (l :*: r) where
+  gbindR (l :*: r) k = gbindR l k :*: gbindR r k
