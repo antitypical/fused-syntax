@@ -1,4 +1,4 @@
-{-# LANGUAGE DefaultSignatures, FlexibleInstances, FunctionalDependencies, QuantifiedConstraints, TypeOperators, UndecidableInstances #-}
+{-# LANGUAGE DefaultSignatures, FlexibleInstances, FunctionalDependencies, GeneralizedNewtypeDeriving, QuantifiedConstraints, StandaloneDeriving, TypeOperators, UndecidableInstances #-}
 module Syntax.Module
 ( -- * Right modules
   RightModule(..)
@@ -19,6 +19,7 @@ module Syntax.Module
 ) where
 
 import Control.Monad.Trans.Class
+import GHC.Generics
 import Syntax.Functor
 import qualified Syntax.Sum as Sum
 
@@ -114,3 +115,5 @@ joinl = (*>>= id)
 
 class Monad m => GRightModule m f | f -> m where
   gbindR :: f a -> (a -> m b) -> f b
+
+deriving instance GRightModule m f => GRightModule m (M1 i c f)
