@@ -131,3 +131,6 @@ instance (RightModule f, Monad m) => GRightModule m (Rec1 (f m)) where
 
 instance Monad m => GRightModule m (Rec1 m) where
   gbindR r k = Rec1 (unRec1 r >>= k)
+
+instance GRightModule m (K1 R k) where
+  gbindR (K1 c) _ = (K1 c)
