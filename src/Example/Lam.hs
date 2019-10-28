@@ -25,10 +25,7 @@ deriving instance (Show a, forall a . Show a => Show (f a))          => Show (La
 
 instance HFunctor Lam
 instance Effect Traversable Lam
-
-instance RightModule Lam where
-  Abs b  >>=* f = Abs (b >>=* f)
-  g :$ a >>=* f = (g >>= f) :$ (a >>= f)
+instance RightModule Lam
 
 
 lam :: (Eq a, Has Lam sig t) => a -> t a -> t a
