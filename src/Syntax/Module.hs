@@ -1,4 +1,4 @@
-{-# LANGUAGE DefaultSignatures, FlexibleInstances, FunctionalDependencies, GeneralizedNewtypeDeriving, QuantifiedConstraints, StandaloneDeriving, TypeOperators, UndecidableInstances #-}
+{-# LANGUAGE DefaultSignatures, FlexibleContexts, FlexibleInstances, FunctionalDependencies, GeneralizedNewtypeDeriving, QuantifiedConstraints, StandaloneDeriving, TypeOperators, UndecidableInstances #-}
 module Syntax.Module
 ( -- * Right modules
   RightModule(..)
@@ -44,8 +44,8 @@ import qualified Syntax.Sum as Sum
 -- @
 class HFunctor f => RightModule f where
   (>>=*) :: Monad m => f m a -> (a -> m b) -> f m b
-  default (>>=*) :: (Monad m, MonadTrans f, Monad (f m)) => f m a -> (a -> m b) -> f m b
-  m >>=* f = m >>= lift . f
+  default (>>=*) :: (Generic1 (f m), GRightModule m (Rep1 (f m))) => f m a -> (a -> m b) -> f m b
+  f >>=* k = to1 (gbindR (from1 f) k)
 
   infixl 1 >>=*
 
