@@ -125,3 +125,6 @@ instance (GRightModule m l, GRightModule m r) => GRightModule m (l :+: r) where
 
 instance (RightModule f, Monad m) => GRightModule m (Rec1 (f m)) where
   gbindR r k = Rec1 (unRec1 r >>=* k)
+
+instance Monad m => GRightModule m (Rec1 m) where
+  gbindR r k = Rec1 (unRec1 r >>= k)
