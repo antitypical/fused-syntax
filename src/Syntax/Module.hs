@@ -1,4 +1,4 @@
-{-# LANGUAGE DefaultSignatures, FlexibleContexts, FlexibleInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, QuantifiedConstraints, StandaloneDeriving, TypeOperators, UndecidableInstances #-}
+{-# LANGUAGE DefaultSignatures, EmptyCase, FlexibleContexts, FlexibleInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, QuantifiedConstraints, StandaloneDeriving, TypeOperators, UndecidableInstances #-}
 module Syntax.Module
 ( -- * Right modules
   RightModule(..)
@@ -137,3 +137,6 @@ instance GRightModule m (K1 R k) where
 
 instance GRightModule m U1 where
   gbindR U1 _ = U1
+
+instance GRightModule m V1 where
+  gbindR v _ = case v of {}
