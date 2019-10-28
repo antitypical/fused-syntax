@@ -1,4 +1,4 @@
-{-# LANGUAGE DefaultSignatures, QuantifiedConstraints, TypeOperators #-}
+{-# LANGUAGE DefaultSignatures, FlexibleInstances, FunctionalDependencies, QuantifiedConstraints, TypeOperators, UndecidableInstances #-}
 module Syntax.Module
 ( -- * Right modules
   RightModule(..)
@@ -14,6 +14,8 @@ module Syntax.Module
 , (*>=>)
 , (*<=<)
 , joinl
+  -- * Generic derivation of 'RightModule'
+, GRightModule(..)
 ) where
 
 import Control.Monad.Trans.Class
@@ -108,3 +110,7 @@ infixr 1 *<=<
 
 joinl :: (LeftModule f, Monad m) => m (f m a) -> f m a
 joinl = (*>>= id)
+
+
+class Monad m => GRightModule m f | f -> m where
+  gbindR :: f a -> (a -> m b) -> f b
