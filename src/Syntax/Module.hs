@@ -111,7 +111,7 @@ joinl :: (LeftModule f, Monad m) => m (f m a) -> f m a
 joinl = (*>>= id)
 
 
-class Monad m => GRightModule m f where
+class GRightModule m f where
   gbindR :: f a -> (a -> m b) -> f b
 
 deriving instance GRightModule m f => GRightModule m (M1 i c f)
