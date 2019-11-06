@@ -4,4 +4,4 @@ module Syntax.Functor
 , GHFunctor(..)
 ) where
 
-import Control.Effect.Class (HFunctor(..), GHFunctor(..))
+import Control.Effect.Carrier (HFunctor(..), GHFunctor(..))

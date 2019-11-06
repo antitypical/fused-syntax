@@ -10,7 +10,7 @@ module Syntax.Term
 ) where
 
 import Control.Applicative (Alternative(..))
-import Control.Carrier (Carrier(..))
+import Control.Effect.Carrier (Carrier(..))
 import Control.Monad ((<=<), ap)
 import Syntax.Algebra
 import Syntax.Fin
