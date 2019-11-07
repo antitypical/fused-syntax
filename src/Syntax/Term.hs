@@ -61,16 +61,12 @@ instance RightModule sig
 
 
 hoistTerm
-  :: forall sig sig' a
-  .  ( HFunctor sig
+  :: ( HFunctor sig
      , forall g . Functor g => Functor (sig g)
      )
   => (forall m x . sig m x -> sig' m x)
   -> (Term sig a -> Term sig' a)
-hoistTerm f = go where
-  go :: forall a . Term sig a -> Term sig' a
-  go (Var v) = Var v
-  go (Alg t) = Alg (f (hmap go t))
+hoistTerm f = cata Var (Alg . f)
 
 
 unTerm :: Alternative m => Term sig a -> m (sig (Term sig) a)
