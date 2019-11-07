@@ -3,6 +3,7 @@ module Syntax.Fix
 ( Fix(..)
 , hoistFix
 , prjFix
+, cata
 ) where
 
 import Control.Applicative (Alternative(..))
@@ -37,3 +38,16 @@ hoistFix f = go where
 
 prjFix :: (Alternative m, Project sub sig) => Fix sig a -> m (sub (Fix sig) a)
 prjFix = maybe empty pure . prj . unFix
+
+
+cata
+  :: forall sig m a
+  .  ( HFunctor sig
+     , forall g . Functor g => Functor (sig g)
+     )
+  => (forall x . sig m x -> m x)
+  -> Fix sig a
+  -> m a
+cata alg = go where
+  go :: forall a . Fix sig a -> m a
+  go = alg . hmap go . unFix
