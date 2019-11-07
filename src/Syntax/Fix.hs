@@ -5,6 +5,8 @@ module Syntax.Fix
 
 newtype Fix sig a = Fix { unFix :: sig (Fix sig) a }
 
+deriving instance (Eq a, forall g x . (Eq x, forall y . Eq y => Eq (g y)) => Eq (sig g x)) => Eq (Fix sig a)
+
 deriving instance (forall g . Foldable    g => Foldable    (sig g)) => Foldable (Fix sig)
 deriving instance (forall g . Functor     g => Functor     (sig g)) => Functor  (Fix sig)
 deriving instance (forall g . Foldable    g => Foldable    (sig g)
