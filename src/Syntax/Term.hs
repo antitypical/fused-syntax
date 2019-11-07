@@ -89,16 +89,16 @@ iter = \case
 
 cata
   :: forall sig m a
-  .  ( Applicative m
-     , HFunctor sig
+  .  ( HFunctor sig
      , forall g . Functor g => Functor (sig g)
      )
-  => (forall x . sig m x -> m x)
+  => (forall x . x -> m x)
+  -> (forall x . sig m x -> m x)
   -> (Term sig a -> m a)
-cata alg = go where
+cata var alg = go where
   go :: forall a . Term sig a -> m a
   go = \case
-    Var v -> pure v
+    Var v -> var v
     Alg t -> alg (hmap go t)
 
 
