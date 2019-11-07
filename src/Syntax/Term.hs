@@ -5,6 +5,7 @@ module Syntax.Term
 , unTerm
 , prjTerm
 , iter
+, cata
   -- * Pretty-printing
 , foldTerm
 ) where
@@ -84,6 +85,21 @@ iter :: (Carrier sig m, forall f . Functor f => Functor (sig f)) => Term sig a -
 iter = \case
   Var a -> pure a
   Alg t -> eff (hmap iter t)
+
+
+cata
+  :: forall sig m a
+  .  ( Applicative m
+     , HFunctor sig
+     , forall g . Functor g => Functor (sig g)
+     )
+  => (forall x . sig m x -> m x)
+  -> (Term sig a -> m a)
+cata alg = go where
+  go :: forall a . Term sig a -> m a
+  go = \case
+    Var v -> pure v
+    Alg t -> alg (hmap go t)
 
 
 foldTerm
