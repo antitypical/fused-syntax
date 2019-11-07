@@ -5,6 +5,7 @@ module Syntax.Term
 , unTerm
 , prjTerm
 , iter
+, cata
   -- * Pretty-printing
 , foldTerm
 ) where
@@ -60,16 +61,12 @@ instance RightModule sig
 
 
 hoistTerm
-  :: forall sig sig' a
-  .  ( HFunctor sig
+  :: ( HFunctor sig
      , forall g . Functor g => Functor (sig g)
      )
   => (forall m x . sig m x -> sig' m x)
   -> (Term sig a -> Term sig' a)
-hoistTerm f = go where
-  go :: forall a . Term sig a -> Term sig' a
-  go (Var v) = Var v
-  go (Alg t) = Alg (f (hmap go t))
+hoistTerm f = cata Var (Alg . f)
 
 
 unTerm :: Alternative m => Term sig a -> m (sig (Term sig) a)
@@ -84,6 +81,21 @@ iter :: (Carrier sig m, forall f . Functor f => Functor (sig f)) => Term sig a -
 iter = \case
   Var a -> pure a
   Alg t -> eff (hmap iter t)
+
+
+cata
+  :: forall sig m a
+  .  ( HFunctor sig
+     , forall g . Functor g => Functor (sig g)
+     )
+  => (forall x . x -> m x)
+  -> (forall x . sig m x -> m x)
+  -> (Term sig a -> m a)
+cata var alg = go where
+  go :: forall a . Term sig a -> m a
+  go = \case
+    Var v -> var v
+    Alg t -> alg (hmap go t)
 
 
 foldTerm
