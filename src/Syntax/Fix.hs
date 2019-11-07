@@ -2,4 +2,4 @@ module Syntax.Fix
 ( Fix(..)
 ) where
 
-newtype Fix f a = Fix { unFix :: f (Fix f) a }
+newtype Fix sig a = Fix { unFix :: sig (Fix sig) a }
