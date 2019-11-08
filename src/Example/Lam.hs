@@ -5,7 +5,7 @@ module Example.Lam
 , ($$)
 ) where
 
-import Control.Effect.Carrier
+import Control.Algebra
 import GHC.Generics (Generic1)
 import Syntax.Module
 import Syntax.Scope
@@ -29,10 +29,10 @@ instance RightModule Lam where
   g :$ a >>=* f = (g >>= f) :$ (a >>= f)
 
 
-lam :: (Eq a, Carrier sig t, Member Lam sig) => a -> t a -> t a
+lam :: (Eq a, Has Lam sig t) => a -> t a -> t a
 lam v b = send (Abs (abstract1 v b))
 
-($$) :: (Carrier sig t, Member Lam sig) => t a -> t a -> t a
+($$) :: Has Lam sig t => t a -> t a -> t a
 f $$ a = send (f :$ a)
 
 infixl 9 $$

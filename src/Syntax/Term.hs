@@ -11,7 +11,7 @@ module Syntax.Term
 ) where
 
 import Control.Applicative (Alternative(..))
-import Control.Effect.Carrier (Carrier(..))
+import Control.Algebra (Algebra(..))
 import Control.Monad ((<=<), ap)
 import Syntax.Fin
 import Syntax.Functor
@@ -56,8 +56,8 @@ instance RightModule sig
 
 
 instance RightModule sig
-      => Carrier sig (Term sig) where
-  eff = Alg
+      => Algebra sig (Term sig) where
+  alg = Alg
 
 
 hoistTerm
@@ -77,10 +77,10 @@ prjTerm :: (Alternative m, Project sub sig) => Term sig a -> m (sub (Term sig) a
 prjTerm = maybe empty pure . (prj <=< unTerm)
 
 
-iter :: (Carrier sig m, forall f . Functor f => Functor (sig f)) => Term sig a -> m a
+iter :: (Algebra sig m, forall f . Functor f => Functor (sig f)) => Term sig a -> m a
 iter = \case
   Var a -> pure a
-  Alg t -> eff (hmap iter t)
+  Alg t -> alg (hmap iter t)
 
 
 cata
