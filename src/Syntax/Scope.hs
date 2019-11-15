@@ -21,6 +21,7 @@ import Control.Applicative (liftA2)
 import Control.Monad ((<=<), guard)
 import Control.Monad.Trans.Class
 import Data.Bifunctor (first)
+import Data.Coerce
 import Data.Function (on)
 import GHC.Generics (Generic, Generic1)
 import Syntax.Fin as Fin
