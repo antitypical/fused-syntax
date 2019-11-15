@@ -50,6 +50,7 @@ instance Monad (Var a) where
 
 unVar :: (a -> c) -> (b -> c) -> Var a b -> c
 unVar z s = \case { B a -> z a ; F b -> s b }
+{-# INLINE unVar #-}
 
 
 toEither :: Var a b -> Either a b

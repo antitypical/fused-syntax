@@ -18,6 +18,7 @@ module Syntax.Scope
 ) where
 
 import Control.Applicative (liftA2)
+import Control.Algebra (Effect(..))
 import Control.Monad ((<=<), guard)
 import Control.Monad.Trans.Class
 import Data.Bifunctor (first)
@@ -32,7 +33,8 @@ newtype Scope a f b = Scope (f (Var a (f b)))
   deriving (Foldable, Functor, Generic, Generic1, Traversable)
 
 unScope :: Scope a f b -> f (Var a (f b))
-unScope (Scope s) = s
+unScope = coerce
+{-# INLINE unScope #-}
 
 instance HFunctor (Scope a) where
   hmap f = Scope . f . fmap (fmap f) . unScope
