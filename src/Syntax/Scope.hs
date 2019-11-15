@@ -18,7 +18,6 @@ module Syntax.Scope
 ) where
 
 import Control.Applicative (liftA2)
-import Control.Algebra (Effect(..))
 import Control.Monad ((<=<), guard)
 import Control.Monad.Trans.Class
 import Data.Bifunctor (first)
