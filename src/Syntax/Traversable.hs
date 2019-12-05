@@ -5,11 +5,12 @@ module Syntax.Traversable
 ) where
 
 import GHC.Generics
+import Syntax.Foldable
 import Syntax.Functor
 import qualified Syntax.Sum as Sum
 
-class ( HFunctor sig
-      , forall g . Foldable g    => Foldable    (sig g)
+class ( HFoldable sig
+      , HFunctor sig
       , forall g . Functor  g    => Functor     (sig g)
       , forall g . Traversable g => Traversable (sig g)
       )
