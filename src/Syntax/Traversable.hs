@@ -28,11 +28,11 @@ instance (HTraversable l, HTraversable r) => HTraversable (l Sum.:+: r) where
   htraverse f = Sum.unSum (fmap Sum.L . htraverse f) (fmap Sum.R . htraverse f)
 
 
-class GHTraversable g h rep rep' where
-  ghtraverse :: (Monad f, Traversable g) => (forall x . g x -> f (h x)) -> rep a -> f (rep' a)
+class GHTraversable g g' rep rep' where
+  ghtraverse :: (Monad f, Traversable g) => (forall x . g x -> f (g' x)) -> rep a -> f (rep' a)
 
-instance GHTraversable g h V1 V1 where
+instance GHTraversable g g' V1 V1 where
   ghtraverse _ = \case {}
 
-instance GHTraversable g h U1 U1 where
+instance GHTraversable g g' U1 U1 where
   ghtraverse _ = pure
