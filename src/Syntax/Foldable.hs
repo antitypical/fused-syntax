@@ -24,3 +24,6 @@ class GHFoldable g rep where
 
 instance GHFoldable g V1 where
   ghfoldMap _ = \case {}
+
+instance GHFoldable g U1 where
+  ghfoldMap _ _ = empty
