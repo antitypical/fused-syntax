@@ -5,8 +5,10 @@ module Example.Lam
 , ($$)
 ) where
 
+import Control.Applicative ((<|>))
 import Control.Effect.Carrier
 import GHC.Generics (Generic1)
+import Syntax.Foldable
 import Syntax.Module
 import Syntax.Scope
 import Syntax.Traversable
@@ -25,6 +27,10 @@ deriving instance (Show a, forall a . Show a => Show (f a))          => Show (La
 
 instance HFunctor Lam
 instance HTraversable Lam
+instance HFoldable Lam where
+  hfoldMap f = \case
+    Abs b  -> hfoldMap f b
+    g :$ a -> f g <|> f a
 
 instance RightModule Lam where
   Abs b  >>=* f = Abs (b >>=* f)
