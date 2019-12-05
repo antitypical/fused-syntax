@@ -1,10 +1,11 @@
-{-# LANGUAGE MultiParamTypeClasses, QuantifiedConstraints, RankNTypes, TypeOperators #-}
+{-# LANGUAGE EmptyCase, FlexibleInstances, LambdaCase, MultiParamTypeClasses, QuantifiedConstraints, RankNTypes, TypeOperators #-}
 module Syntax.Foldable
 ( HFoldable(..)
 , GHFoldable(..)
 ) where
 
 import Control.Applicative
+import GHC.Generics
 import qualified Syntax.Sum as Sum
 
 class (forall g . Foldable g => Foldable (sig g))
@@ -20,3 +21,6 @@ instance (HFoldable l, HFoldable r) => HFoldable (l Sum.:+: r) where
 
 class GHFoldable g rep where
   ghfoldMap :: (Alternative m, Monad m, Foldable g) => (forall x . g x -> m x) -> rep a -> m a
+
+instance GHFoldable g V1 where
+  ghfoldMap _ = \case {}
