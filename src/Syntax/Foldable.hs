@@ -1,6 +1,7 @@
-{-# LANGUAGE QuantifiedConstraints, RankNTypes, TypeOperators #-}
+{-# LANGUAGE MultiParamTypeClasses, QuantifiedConstraints, RankNTypes, TypeOperators #-}
 module Syntax.Foldable
 ( HFoldable(..)
+, GHFoldable(..)
 ) where
 
 import Control.Applicative
@@ -15,3 +16,7 @@ class (forall g . Foldable g => Foldable (sig g))
 
 instance (HFoldable l, HFoldable r) => HFoldable (l Sum.:+: r) where
   hfoldMap f = Sum.unSum (hfoldMap f) (hfoldMap f)
+
+
+class GHFoldable g rep where
+  ghfoldMap :: (Alternative m, Monad m, Foldable g) => (forall x . g x -> m x) -> rep a -> m a
