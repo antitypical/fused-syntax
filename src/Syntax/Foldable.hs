@@ -40,3 +40,8 @@ instance (GHFoldable g l, GHFoldable g r) => GHFoldable g (l :*: r) where
 
 instance (Traversable f, GHFoldable g sig) => GHFoldable g (f :.: sig) where
   ghfoldMap f = getAlt . foldMap (Alt . ghfoldMap f) . unComp1
+
+instance (GHFoldable g l, GHFoldable g r) => GHFoldable g (l :+: r) where
+  ghfoldMap f = \case
+    L1 l -> ghfoldMap f l
+    R1 r -> ghfoldMap f r
