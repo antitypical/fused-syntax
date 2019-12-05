@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveTraversable, FlexibleInstances, LambdaCase, MultiParamTypeClasses, QuantifiedConstraints, RankNTypes, ScopedTypeVariables, StandaloneDeriving, UndecidableInstances #-}
+{-# LANGUAGE DeriveTraversable, FlexibleInstances, LambdaCase, MultiParamTypeClasses, QuantifiedConstraints, RankNTypes, ScopedTypeVariables, StandaloneDeriving, TypeOperators, UndecidableInstances #-}
 module Syntax.Term
 ( Term(..)
 , hoistTerm
@@ -7,6 +7,7 @@ module Syntax.Term
 , iter
 , cata
 , cataM
+, handle
   -- * Pretty-printing
 , foldTerm
 ) where
@@ -112,6 +113,18 @@ cataM var alg = go where
   go = \case
     Var v -> var v
     Alg t -> alg =<< htraverse go t
+
+handle
+  :: forall syn sig m a
+  .  ( HTraversable sig
+     , HTraversable syn
+     , Monad m
+     )
+  => (forall   x . x       -> m (Term sig x))
+  -> (forall t x . syn t x -> m (Term sig x))
+  -> Term (syn :+: sig) a
+  -> m (Term sig a)
+handle var alg = cataM var (unSum alg (fmap Alg . htraverse pure))
 
 
 foldTerm
