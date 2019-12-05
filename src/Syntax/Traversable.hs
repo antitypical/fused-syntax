@@ -47,3 +47,6 @@ instance (GHTraversable g g' l l', GHTraversable g g' r r') => GHTraversable g g
 
 instance GHTraversable g g' f f' => GHTraversable g g' (M1 i c f) (M1 i c f') where
   ghtraverse f = fmap M1 . ghtraverse f . unM1
+
+instance GHTraversable g g' (Rec1 g) (Rec1 g') where
+  ghtraverse f = fmap Rec1 . f . unRec1
