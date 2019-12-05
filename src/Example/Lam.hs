@@ -9,6 +9,7 @@ import Control.Effect.Carrier
 import GHC.Generics (Generic1)
 import Syntax.Module
 import Syntax.Scope
+import Syntax.Traversable
 
 data Lam t a
   = Abs (Scope () t a)
@@ -36,3 +37,8 @@ lam v b = send (Abs (abstract1 v b))
 f $$ a = send (f :$ a)
 
 infixl 9 $$
+
+instance HTraversable Lam where
+  htraverse f = \case
+    Abs b  -> Abs <$> htraverse f b
+    g :$ a -> (:$) <$> f g <*> f a
