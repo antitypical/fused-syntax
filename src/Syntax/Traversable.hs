@@ -50,3 +50,6 @@ instance GHTraversable g g' f f' => GHTraversable g g' (M1 i c f) (M1 i c f') wh
 
 instance GHTraversable g g' (Rec1 g) (Rec1 g') where
   ghtraverse f = fmap Rec1 . f . unRec1
+
+instance HTraversable sig => GHTraversable g g' (Rec1 (sig g)) (Rec1 (sig g')) where
+  ghtraverse f = fmap Rec1 . htraverse f . unRec1
