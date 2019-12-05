@@ -1,6 +1,7 @@
-{-# LANGUAGE RankNTypes, QuantifiedConstraints, TypeOperators #-}
+{-# LANGUAGE MultiParamTypeClasses, RankNTypes, QuantifiedConstraints, TypeOperators #-}
 module Syntax.Traversable
 ( HTraversable(..)
+, GHTraversable(..)
 ) where
 
 import Syntax.Functor
@@ -16,3 +17,7 @@ class ( HFunctor sig
 
 instance (HTraversable l, HTraversable r) => HTraversable (l :+: r) where
   htraverse f = unSum (fmap L . htraverse f) (fmap R . htraverse f)
+
+
+class GHTraversable g h rep rep' where
+  ghtraverse :: (Monad f, Traversable g) => (forall x . g x -> f (h x)) -> rep a -> f (rep' a)
