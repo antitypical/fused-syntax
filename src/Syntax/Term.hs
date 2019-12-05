@@ -124,7 +124,7 @@ handle
   -> (forall t x . syn t x -> m (Term sig x))
   -> Term (syn :+: sig) a
   -> m (Term sig a)
-handle var alg = cataM var (unSum alg (fmap Alg . htraverse pure))
+handle var alg = cataM var (unSum alg (pure . Alg))
 
 
 foldTerm
