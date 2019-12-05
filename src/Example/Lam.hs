@@ -24,6 +24,7 @@ deriving instance (Ord  a, forall a . Eq   a => Eq   (f a)
 deriving instance (Show a, forall a . Show a => Show (f a))          => Show (Lam f a)
 
 instance HFunctor Lam
+instance HTraversable Lam
 
 instance RightModule Lam where
   Abs b  >>=* f = Abs (b >>=* f)
@@ -37,8 +38,3 @@ lam v b = send (Abs (abstract1 v b))
 f $$ a = send (f :$ a)
 
 infixl 9 $$
-
-instance HTraversable Lam where
-  htraverse f = \case
-    Abs b  -> Abs <$> htraverse f b
-    g :$ a -> (:$) <$> f g <*> f a
