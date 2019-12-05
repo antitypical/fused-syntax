@@ -5,6 +5,7 @@ module Syntax.Foldable
 ) where
 
 import Control.Applicative
+import Data.Monoid (Alt(..))
 import GHC.Generics
 import qualified Syntax.Sum as Sum
 
@@ -36,3 +37,6 @@ instance GHFoldable g Par1 where
 
 instance (GHFoldable g l, GHFoldable g r) => GHFoldable g (l :*: r) where
   ghfoldMap f (l :*: r) = ghfoldMap f l <|> ghfoldMap f r
+
+instance (Traversable f, GHFoldable g sig) => GHFoldable g (f :.: sig) where
+  ghfoldMap f = getAlt . foldMap (Alt . ghfoldMap f) . unComp1
