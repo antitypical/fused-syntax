@@ -45,6 +45,9 @@ instance GHTraversable g g' Par1 Par1 where
 instance (GHTraversable g g' l l', GHTraversable g g' r r') => GHTraversable g g' (l :*: r) (l' :*: r') where
   ghtraverse f (l :*: r) = (:*:) <$> ghtraverse f l <*> ghtraverse f r
 
+instance (Traversable f, GHTraversable g g' sig sig') => GHTraversable g g' (f :.: sig) (f :.: sig') where
+  ghtraverse f = fmap Comp1 . traverse (ghtraverse f) . unComp1
+
 instance (GHTraversable g g' l l', GHTraversable g g' r r') => GHTraversable g g' (l :+: r) (l' :+: r') where
   ghtraverse f = \case
     L1 l -> L1 <$> ghtraverse f l
