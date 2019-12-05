@@ -39,6 +39,9 @@ instance GHTraversable g g' U1 U1 where
 instance GHTraversable g g' (K1 R r) (K1 R r) where
   ghtraverse _ = pure
 
+instance GHTraversable g g' Par1 Par1 where
+  ghtraverse _ = pure
+
 instance (GHTraversable g g' l l', GHTraversable g g' r r') => GHTraversable g g' (l :*: r) (l' :*: r') where
   ghtraverse f (l :*: r) = (:*:) <$> ghtraverse f l <*> ghtraverse f r
 
