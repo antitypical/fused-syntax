@@ -45,3 +45,6 @@ instance (GHFoldable g l, GHFoldable g r) => GHFoldable g (l :+: r) where
   ghfoldMap f = \case
     L1 l -> ghfoldMap f l
     R1 r -> ghfoldMap f r
+
+instance GHFoldable g f => GHFoldable g (M1 i c f) where
+  ghfoldMap f = ghfoldMap f . unM1
