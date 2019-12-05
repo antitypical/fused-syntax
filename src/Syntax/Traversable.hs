@@ -1,4 +1,4 @@
-{-# LANGUAGE DefaultSignatures, EmptyCase, FlexibleContexts, FlexibleInstances, MultiParamTypeClasses, RankNTypes, QuantifiedConstraints, TypeOperators #-}
+{-# LANGUAGE DefaultSignatures, EmptyCase, FlexibleContexts, FlexibleInstances, LambdaCase, MultiParamTypeClasses, RankNTypes, QuantifiedConstraints, TypeOperators #-}
 module Syntax.Traversable
 ( HTraversable(..)
 , GHTraversable(..)
@@ -32,7 +32,7 @@ class GHTraversable g h rep rep' where
   ghtraverse :: (Monad f, Traversable g) => (forall x . g x -> f (h x)) -> rep a -> f (rep' a)
 
 instance GHTraversable g h V1 V1 where
-  ghtraverse _ v = case v of {}
+  ghtraverse _ = \case {}
 
 instance GHTraversable g h U1 U1 where
   ghtraverse _ = pure
