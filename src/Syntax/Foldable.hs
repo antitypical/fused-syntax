@@ -33,3 +33,6 @@ instance GHFoldable g (K1 R r) where
 
 instance GHFoldable g Par1 where
   ghfoldMap _ _ = empty
+
+instance (GHFoldable g l, GHFoldable g r) => GHFoldable g (l :*: r) where
+  ghfoldMap f (l :*: r) = ghfoldMap f l <|> ghfoldMap f r
