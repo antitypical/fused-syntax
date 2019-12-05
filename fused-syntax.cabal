@@ -48,6 +48,7 @@ library
     Syntax.Sum
     Syntax.Term
     Syntax.Trans.Scope
+    Syntax.Traversable
     Syntax.Var
     Syntax.Vec
   other-modules:
