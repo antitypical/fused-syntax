@@ -1,4 +1,4 @@
-{-# LANGUAGE EmptyCase, FlexibleInstances, LambdaCase, MultiParamTypeClasses, QuantifiedConstraints, RankNTypes, TypeOperators #-}
+{-# LANGUAGE DefaultSignatures, EmptyCase, FlexibleContexts, FlexibleInstances, LambdaCase, MultiParamTypeClasses, QuantifiedConstraints, RankNTypes, TypeOperators #-}
 module Syntax.Foldable
 ( HFoldable(..)
 , GHFoldable(..)
@@ -15,6 +15,11 @@ class (forall g . Foldable g => Foldable (sig g))
     :: (Alternative m, Monad m, Foldable g)
     => (forall a . g a -> m a)
     -> (sig g a -> m a)
+  default hfoldMap
+    :: (Alternative m, Monad m, Foldable g, Generic1 (sig g), GHFoldable g (Rep1 (sig g)))
+    => (forall a . g a -> m a)
+    -> (sig g a -> m a)
+  hfoldMap f = ghfoldMap f . from1
 
 instance (HFoldable l, HFoldable r) => HFoldable (l Sum.:+: r) where
   hfoldMap f = Sum.unSum (hfoldMap f) (hfoldMap f)
