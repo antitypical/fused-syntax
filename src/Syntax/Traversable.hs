@@ -24,8 +24,7 @@ class ( HFunctor sig
     -> (sig g a -> f (sig h a))
   htraverse f = fmap to1 . ghtraverse f . from1
 
-instance (HTraversable l, HTraversable r) => HTraversable (l Sum.:+: r) where
-  htraverse f = Sum.unSum (fmap Sum.L . htraverse f) (fmap Sum.R . htraverse f)
+instance (HTraversable l, HTraversable r) => HTraversable (l Sum.:+: r)
 
 
 class GHTraversable g g' rep rep' where
