@@ -44,3 +44,6 @@ instance (GHTraversable g g' l l', GHTraversable g g' r r') => GHTraversable g g
   ghtraverse f = \case
     L1 l -> L1 <$> ghtraverse f l
     R1 r -> R1 <$> ghtraverse f r
+
+instance GHTraversable g g' f f' => GHTraversable g g' (M1 i c f) (M1 i c f') where
+  ghtraverse f = fmap M1 . ghtraverse f . unM1
