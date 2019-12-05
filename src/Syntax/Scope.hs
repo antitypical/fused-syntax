@@ -22,8 +22,10 @@ import Control.Monad ((<=<), guard)
 import Control.Monad.Trans.Class
 import Data.Bifunctor (first)
 import Data.Function (on)
+import Data.Monoid (Alt(..))
 import GHC.Generics (Generic, Generic1)
 import Syntax.Fin as Fin
+import Syntax.Foldable
 import Syntax.Functor
 import Syntax.Module
 import Syntax.Traversable
@@ -34,6 +36,9 @@ newtype Scope a f b = Scope (f (Var a (f b)))
 
 unScope :: Scope a f b -> f (Var a (f b))
 unScope (Scope s) = s
+
+instance HFoldable (Scope a) where
+  hfoldMap f = getAlt . foldMap (foldMap (Alt . f)) . unScope
 
 instance HFunctor (Scope a) where
   hmap f = Scope . f . fmap (fmap f) . unScope
