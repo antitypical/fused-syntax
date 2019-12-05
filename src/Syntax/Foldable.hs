@@ -48,3 +48,6 @@ instance (GHFoldable g l, GHFoldable g r) => GHFoldable g (l :+: r) where
 
 instance GHFoldable g f => GHFoldable g (M1 i c f) where
   ghfoldMap f = ghfoldMap f . unM1
+
+instance GHFoldable g (Rec1 g) where
+  ghfoldMap f = f . unRec1
