@@ -51,3 +51,6 @@ instance GHFoldable g f => GHFoldable g (M1 i c f) where
 
 instance GHFoldable g (Rec1 g) where
   ghfoldMap f = f . unRec1
+
+instance HFoldable sig => GHFoldable g (Rec1 (sig g)) where
+  ghfoldMap f = hfoldMap f . unRec1
