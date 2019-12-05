@@ -26,6 +26,7 @@ import GHC.Generics (Generic, Generic1)
 import Syntax.Fin as Fin
 import Syntax.Functor
 import Syntax.Module
+import Syntax.Traversable
 import Syntax.Var
 
 newtype Scope a f b = Scope (f (Var a (f b)))
@@ -36,6 +37,9 @@ unScope (Scope s) = s
 
 instance HFunctor (Scope a) where
   hmap f = Scope . f . fmap (fmap f) . unScope
+
+instance HTraversable (Scope a) where
+  htraverse f = fmap Scope . f <=< traverse (traverse f) . unScope
 
 instance (Eq  a, Eq  b, forall a . Eq  a => Eq  (f a), Monad f) => Eq  (Scope a f b) where
   (==) = (==) `on` fromScope
