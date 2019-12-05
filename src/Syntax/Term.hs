@@ -6,6 +6,7 @@ module Syntax.Term
 , prjTerm
 , iter
 , cata
+, cataM
   -- * Pretty-printing
 , foldTerm
 ) where
@@ -17,6 +18,7 @@ import Syntax.Fin
 import Syntax.Functor
 import Syntax.Module
 import Syntax.Sum
+import Syntax.Traversable
 import Syntax.Var
 import Syntax.Vec
 
@@ -96,6 +98,20 @@ cata var alg = go where
   go = \case
     Var v -> var v
     Alg t -> alg (hmap go t)
+
+cataM
+  :: forall sig m f a
+  .  ( HTraversable sig
+     , Monad m
+     )
+  => (forall x . x -> m (f x))
+  -> (forall x . sig f x -> m (f x))
+  -> (Term sig a -> m (f a))
+cataM var alg = go where
+  go :: forall a . Term sig a -> m (f a)
+  go = \case
+    Var v -> var v
+    Alg t -> alg =<< htraverse go t
 
 
 foldTerm
