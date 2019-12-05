@@ -1,4 +1,4 @@
-{-# LANGUAGE DefaultSignatures, FlexibleContexts, MultiParamTypeClasses, RankNTypes, QuantifiedConstraints, TypeOperators #-}
+{-# LANGUAGE DefaultSignatures, FlexibleContexts, FlexibleInstances, MultiParamTypeClasses, RankNTypes, QuantifiedConstraints, TypeOperators #-}
 module Syntax.Traversable
 ( HTraversable(..)
 , GHTraversable(..)
@@ -30,3 +30,6 @@ instance (HTraversable l, HTraversable r) => HTraversable (l Sum.:+: r) where
 
 class GHTraversable g h rep rep' where
   ghtraverse :: (Monad f, Traversable g) => (forall x . g x -> f (h x)) -> rep a -> f (rep' a)
+
+instance GHTraversable g h U1 U1 where
+  ghtraverse _ = pure
