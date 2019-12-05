@@ -39,6 +39,7 @@ library
   exposed-modules:
     Syntax.Fin
     Syntax.Fix
+    Syntax.Foldable
     Syntax.Functor
     Syntax.Module
     Syntax.Nat

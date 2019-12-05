@@ -1,0 +1,2 @@
+module Syntax.Foldable
+() where
