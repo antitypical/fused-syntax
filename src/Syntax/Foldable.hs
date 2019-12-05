@@ -27,3 +27,6 @@ instance GHFoldable g V1 where
 
 instance GHFoldable g U1 where
   ghfoldMap _ _ = empty
+
+instance GHFoldable g (K1 R r) where
+  ghfoldMap _ _ = empty
