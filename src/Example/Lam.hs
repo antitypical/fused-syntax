@@ -7,8 +7,10 @@ module Example.Lam
 
 import Control.Effect.Carrier
 import GHC.Generics (Generic1)
+import Syntax.Foldable
 import Syntax.Module
 import Syntax.Scope
+import Syntax.Traversable
 
 data Lam t a
   = Abs (Scope () t a)
@@ -22,7 +24,9 @@ deriving instance (Ord  a, forall a . Eq   a => Eq   (f a)
                          , forall a . Ord  a => Ord  (f a), Monad f) => Ord  (Lam f a)
 deriving instance (Show a, forall a . Show a => Show (f a))          => Show (Lam f a)
 
+instance HFoldable Lam
 instance HFunctor Lam
+instance HTraversable Lam
 
 instance RightModule Lam where
   Abs b  >>=* f = Abs (b >>=* f)
