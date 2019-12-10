@@ -56,5 +56,5 @@ library
     Example.Lam
   build-depends:
       base           >= 4.12 && < 4.14
-    , fused-effects ^>= 0.5
+    , fused-effects ^>= 1
     , transformers  ^>= 0.5.6

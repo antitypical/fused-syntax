@@ -1,11 +1,11 @@
-{-# LANGUAGE DeriveGeneric, DeriveTraversable, FlexibleContexts, LambdaCase, MultiParamTypeClasses, QuantifiedConstraints, StandaloneDeriving, TypeApplications #-}
+{-# LANGUAGE ConstraintKinds, DeriveGeneric, DeriveTraversable, FlexibleContexts, LambdaCase, MultiParamTypeClasses, QuantifiedConstraints, StandaloneDeriving, TypeFamilies #-}
 module Example.Lam
 ( Lam(..)
 , lam
 , ($$)
 ) where
 
-import Control.Effect.Carrier
+import Control.Algebra
 import GHC.Generics (Generic1)
 import Syntax.Foldable
 import Syntax.Module
@@ -27,16 +27,13 @@ deriving instance (Show a, forall a . Show a => Show (f a))          => Show (La
 instance HFoldable Lam
 instance HFunctor Lam
 instance HTraversable Lam
-
-instance RightModule Lam where
-  Abs b  >>=* f = Abs (b >>=* f)
-  g :$ a >>=* f = (g >>= f) :$ (a >>= f)
+instance RightModule Lam
 
 
-lam :: (Eq a, Carrier sig t, Member Lam sig) => a -> t a -> t a
+lam :: (Eq a, Has Lam sig t) => a -> t a -> t a
 lam v b = send (Abs (abstract1 v b))
 
-($$) :: (Carrier sig t, Member Lam sig) => t a -> t a -> t a
+($$) :: Has Lam sig t => t a -> t a -> t a
 f $$ a = send (f :$ a)
 
 infixl 9 $$
