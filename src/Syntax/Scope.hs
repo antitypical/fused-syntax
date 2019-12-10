@@ -17,16 +17,18 @@ module Syntax.Scope
 , instantiateVar
 ) where
 
-import Control.Algebra (Effect(..))
 import Control.Applicative (liftA2)
 import Control.Monad ((<=<), guard)
 import Control.Monad.Trans.Class
 import Data.Bifunctor (first)
 import Data.Function (on)
+import Data.Monoid (Alt(..))
 import GHC.Generics (Generic, Generic1)
 import Syntax.Fin as Fin
+import Syntax.Foldable
 import Syntax.Functor
 import Syntax.Module
+import Syntax.Traversable
 import Syntax.Var
 
 newtype Scope a f b = Scope (f (Var a (f b)))
@@ -35,11 +37,14 @@ newtype Scope a f b = Scope (f (Var a (f b)))
 unScope :: Scope a f b -> f (Var a (f b))
 unScope (Scope s) = s
 
+instance HFoldable (Scope a) where
+  hfoldMap f = getAlt . foldMap (foldMap (Alt . f)) . unScope
+
 instance HFunctor (Scope a) where
   hmap f = Scope . f . fmap (fmap f) . unScope
 
-instance Effect Traversable (Scope a) where
-  handle ctx dst = toScope . fmap sequenceA . dst . (<$ ctx) . fromScope
+instance HTraversable (Scope a) where
+  htraverse f = fmap Scope . f <=< traverse (traverse f) . unScope
 
 instance (Eq  a, Eq  b, forall a . Eq  a => Eq  (f a), Monad f) => Eq  (Scope a f b) where
   (==) = (==) `on` fromScope

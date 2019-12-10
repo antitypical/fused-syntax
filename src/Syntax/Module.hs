@@ -42,7 +42,7 @@ import qualified Syntax.Sum as Sum
 -- @
 -- m >>=* (k >=> h) = (m >>=* k) >>=* h
 -- @
-class HFunctor f => RightModule f where
+class (HFunctor f, forall g . Functor g => Functor (f g)) => RightModule f where
   (>>=*) :: Monad m => f m a -> (a -> m b) -> f m b
   default (>>=*) :: (Generic1 (f m), GRightModule m (Rep1 (f m))) => f m a -> (a -> m b) -> f m b
   f >>=* k = to1 (gbindR (from1 f) k)
@@ -78,7 +78,7 @@ joinr = (>>=* id)
 instance (RightModule f, RightModule g) => RightModule (f Sum.:+: g)
 
 
-class HFunctor f => LeftModule f where
+class (HFunctor f, forall g . Functor g => Functor (f g)) => LeftModule f where
   (*>>=) :: Monad m => m a -> (a -> f m b) -> f m b
   default (*>>=) :: (Monad m, MonadTrans f, Monad (f m)) => m a -> (a -> f m b) -> f m b
   m *>>= f = lift m >>= f

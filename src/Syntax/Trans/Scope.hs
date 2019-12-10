@@ -18,14 +18,17 @@ module Syntax.Trans.Scope
 ) where
 
 import Control.Applicative (liftA2)
-import Control.Monad (guard)
+import Control.Monad ((<=<), guard)
 import Control.Monad.Trans.Class
 import Data.Bifunctor (first)
 import Data.Function (on)
+import Data.Monoid (Alt(..))
 import GHC.Generics (Generic, Generic1)
 import Syntax.Fin as Fin
+import Syntax.Foldable
 import Syntax.Functor
 import Syntax.Module
+import Syntax.Traversable
 import Syntax.Var
 
 -- | Like 'Scope', but allows the inner functor to vary. Useful for syntax like declaration scopes, case alternatives, etc., which can bind variables, but cannot (directly) consist solely of them.
@@ -35,8 +38,14 @@ newtype ScopeT a t f b = ScopeT (t f (Var a (f b)))
 unScopeT :: ScopeT a t f b -> t f (Var a (f b))
 unScopeT (ScopeT s) = s
 
-instance HFunctor t => HFunctor (ScopeT a t) where
+instance HFoldable t => HFoldable (ScopeT a t) where
+  hfoldMap f = getAlt . foldMap (Alt . f) <=< hfoldMap f . unScopeT
+
+instance (HFunctor t, forall g . Functor g => Functor (t g)) => HFunctor (ScopeT a t) where
   hmap f = ScopeT . hmap f . fmap (fmap f) . unScopeT
+
+instance HTraversable t => HTraversable (ScopeT a t) where
+  htraverse f = fmap ScopeT . htraverse f <=< traverse (traverse f) . unScopeT
 
 instance (RightModule t, Monad f, Eq  a, Eq  b, forall a . Eq  a => Eq  (t f a)) => Eq  (ScopeT a t f b) where
   (==) = (==) `on` fromScopeT
@@ -58,7 +67,7 @@ instance (Monad (t f), MonadTrans t, Monad f) => Monad (ScopeT a t f) where
 instance MonadTrans f => MonadTrans (ScopeT a f) where
   lift = ScopeT . lift . pure . F
 
-instance HFunctor t => RightModule (ScopeT b t) where
+instance (HFunctor t, forall g . Functor g => Functor (t g)) => RightModule (ScopeT b t) where
   ScopeT s >>=* k = ScopeT (fmap (>>= k) <$> s)
 
 

@@ -38,6 +38,8 @@ library
   hs-source-dirs: src
   exposed-modules:
     Syntax.Fin
+    Syntax.Fix
+    Syntax.Foldable
     Syntax.Functor
     Syntax.Module
     Syntax.Nat
@@ -47,6 +49,7 @@ library
     Syntax.Sum
     Syntax.Term
     Syntax.Trans.Scope
+    Syntax.Traversable
     Syntax.Var
     Syntax.Vec
   other-modules:
