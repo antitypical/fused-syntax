@@ -1,4 +1,6 @@
-{-# LANGUAGE QuantifiedConstraints, RankNTypes, TypeOperators #-}
+{-# LANGUAGE QuantifiedConstraints #-}
+{-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE TypeOperators #-}
 module Syntax.Functor
 ( HFunctor(..)
 ) where
