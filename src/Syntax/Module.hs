@@ -75,7 +75,10 @@ joinr :: (RightModule f, Monad m) => f m (m a) -> f m a
 joinr = (>>=* id)
 
 
-instance (RightModule f, RightModule g) => RightModule (f Sum.:+: g)
+instance (RightModule f, RightModule g) => RightModule (f Sum.:+: g) where
+  s >>=* f = case s of
+    Sum.L l -> Sum.L (l >>=* f)
+    Sum.R r -> Sum.R (r >>=* f)
 
 
 class (HFunctor f, forall g . Functor g => Functor (f g)) => LeftModule f where
