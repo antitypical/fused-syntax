@@ -6,4 +6,4 @@ module Syntax.Functor
 ) where
 
 class (forall f . Functor f => Functor (h f)) => HFunctor h where
-  hmap :: (forall x . f x -> g x) -> (h f a -> h g a)
+  hmap :: Functor f => (forall x . f x -> g x) -> (h f a -> h g a)
