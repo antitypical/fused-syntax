@@ -1,6 +1,7 @@
-{-# LANGUAGE DefaultSignatures, QuantifiedConstraints, RankNTypes, TypeOperators #-}
+{-# LANGUAGE QuantifiedConstraints, RankNTypes, TypeOperators #-}
 module Syntax.Functor
 ( HFunctor(..)
 ) where
 
-import Control.Effect.Class (HFunctor(..))
+class (forall f . Functor f => Functor (h f)) => HFunctor h where
+  hmap :: (forall x . f x -> g x) -> (h f a -> h g a)
