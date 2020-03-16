@@ -11,7 +11,6 @@ import qualified Syntax.Sum as Sum
 
 class ( HFoldable sig
       , HFunctor sig
-      , forall g . Functor  g    => Functor     (sig g)
       , forall g . Traversable g => Traversable (sig g)
       )
    => HTraversable sig where

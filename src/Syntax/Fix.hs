@@ -25,9 +25,7 @@ deriving instance (forall g . Foldable    g => Foldable    (sig g)
 
 
 hoistFix
-  :: ( HFunctor sig
-     , forall g . Functor g => Functor (sig g)
-     )
+  :: HFunctor sig
   => (forall m x . sig m x -> sig' m x)
   -> (Fix sig a -> Fix sig' a)
 hoistFix f = cata (Fix . f)
@@ -39,9 +37,7 @@ prjFix = maybe empty pure . prj . unFix
 
 cata
   :: forall sig m a
-  .  ( HFunctor sig
-     , forall g . Functor g => Functor (sig g)
-     )
+  .  HFunctor sig
   => (forall x . sig m x -> m x)
   -> Fix sig a
   -> m a
