@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleContexts, FlexibleInstances, MultiParamTypeClasses, PolyKinds, TypeOperators #-}
+{-# LANGUAGE ConstraintKinds, FlexibleContexts, FlexibleInstances, MultiParamTypeClasses, PolyKinds, TypeOperators #-}
 module Syntax.Sum
 ( -- * Sum syntax
   (:+:)(..)
@@ -6,6 +6,7 @@ module Syntax.Sum
   -- * Membership
 , Inject(..)
 , Project(..)
+, Member
 ) where
 
 import Control.Effect.Sum ((:+:)(..))
@@ -65,3 +66,6 @@ instance {-# OVERLAPPABLE #-}
       => Project t (l :+: r) where
   prj (R r) = prj r
   prj _     = Nothing
+
+
+type Member sub sup = (Inject sub sup, Project sub sup)
