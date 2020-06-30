@@ -5,8 +5,8 @@ module Example.Lam
 , ($$)
 ) where
 
-import Control.Algebra
 import GHC.Generics (Generic1)
+import Syntax.Algebra
 import Syntax.Foldable
 import Syntax.Functor
 import Syntax.Module
