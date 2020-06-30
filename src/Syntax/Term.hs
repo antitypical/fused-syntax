@@ -64,9 +64,7 @@ instance RightModule sig
 
 
 hoistTerm
-  :: ( HFunctor sig
-     , forall g . Functor g => Functor (sig g)
-     )
+  :: HFunctor sig
   => (forall m x . sig m x -> sig' m x)
   -> (Term sig a -> Term sig' a)
 hoistTerm f = cata Var (Alg . f)
@@ -88,9 +86,7 @@ iter = \case
 
 cata
   :: forall sig m a
-  .  ( HFunctor sig
-     , forall g . Functor g => Functor (sig g)
-     )
+  .  HFunctor sig
   => (forall x . x -> m x)
   -> (forall x . sig m x -> m x)
   -> (Term sig a -> m a)
