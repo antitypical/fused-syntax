@@ -41,6 +41,7 @@ library
   import: common
   hs-source-dirs: src
   exposed-modules:
+    Syntax.Algebra
     Syntax.Fin
     Syntax.Fix
     Syntax.Foldable
