@@ -12,7 +12,7 @@ module Syntax.Functor
 , GHFunctor
 ) where
 
-import qualified Control.Effect.Sum as Sum
+import qualified Syntax.Sum as Sum
 import           GHC.Generics
 
 class (forall f . Functor f => Functor (h f)) => HFunctor h where

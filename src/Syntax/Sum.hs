@@ -1,4 +1,4 @@
-{-# LANGUAGE ConstraintKinds, FlexibleContexts, FlexibleInstances, MultiParamTypeClasses, PolyKinds, TypeFamilies, TypeOperators #-}
+{-# LANGUAGE ConstraintKinds, DeriveGeneric, DeriveTraversable, FlexibleContexts, FlexibleInstances, MultiParamTypeClasses, PolyKinds, TypeFamilies, TypeOperators #-}
 module Syntax.Sum
 ( -- * Sum syntax
   (:+:)(..)
@@ -10,8 +10,15 @@ module Syntax.Sum
 , Members
 ) where
 
-import Control.Effect.Sum ((:+:)(..))
 import Data.Kind (Constraint)
+import GHC.Generics (Generic1)
+
+data (f :+: g) (m :: * -> *) k
+  = L (f m k)
+  | R (g m k)
+  deriving (Eq, Foldable, Functor, Generic1, Ord, Show, Traversable)
+
+infixr 4 :+:
 
 unSum :: (f t a -> b) -> (g t a -> b) -> (f :+: g) t a -> b
 unSum f _ (L l) = f l
