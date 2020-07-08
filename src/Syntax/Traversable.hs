@@ -11,7 +11,6 @@ import qualified Syntax.Sum as Sum
 
 class ( HFoldable sig
       , HFunctor sig
-      , forall g . Functor  g    => Functor     (sig g)
       , forall g . Traversable g => Traversable (sig g)
       )
    => HTraversable sig where
@@ -25,7 +24,10 @@ class ( HFoldable sig
     -> (sig g a -> f (sig h a))
   htraverse f = fmap to1 . ghtraverse f . from1
 
-instance (HTraversable l, HTraversable r) => HTraversable (l Sum.:+: r)
+instance (HTraversable l, HTraversable r) => HTraversable (l Sum.:+: r) where
+  htraverse f = \case
+    Sum.L l -> Sum.L <$> htraverse f l
+    Sum.R r -> Sum.R <$> htraverse f r
 
 
 class GHTraversable g g' rep rep' where

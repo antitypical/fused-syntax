@@ -1,13 +1,14 @@
-{-# LANGUAGE ConstraintKinds, DeriveGeneric, DeriveTraversable, FlexibleContexts, LambdaCase, MultiParamTypeClasses, QuantifiedConstraints, StandaloneDeriving, TypeFamilies #-}
+{-# LANGUAGE ConstraintKinds, DeriveGeneric, DeriveTraversable, FlexibleContexts, MultiParamTypeClasses, QuantifiedConstraints, StandaloneDeriving, TypeFamilies #-}
 module Example.Lam
 ( Lam(..)
 , lam
 , ($$)
 ) where
 
-import Control.Algebra
 import GHC.Generics (Generic1)
+import Syntax.Algebra
 import Syntax.Foldable
+import Syntax.Functor
 import Syntax.Module
 import Syntax.Scope
 import Syntax.Traversable

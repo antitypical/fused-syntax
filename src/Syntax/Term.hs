@@ -12,9 +12,9 @@ module Syntax.Term
 , foldTerm
 ) where
 
-import Control.Algebra (Algebra(..))
 import Control.Applicative (Alternative(..))
 import Control.Monad ((<=<), ap)
+import Syntax.Algebra (Algebra(..))
 import Syntax.Fin
 import Syntax.Functor
 import Syntax.Module
@@ -64,9 +64,7 @@ instance RightModule sig
 
 
 hoistTerm
-  :: ( HFunctor sig
-     , forall g . Functor g => Functor (sig g)
-     )
+  :: HFunctor sig
   => (forall m x . sig m x -> sig' m x)
   -> (Term sig a -> Term sig' a)
 hoistTerm f = cata Var (Alg . f)
@@ -80,7 +78,7 @@ prjTerm :: (Alternative m, Project sub sig) => Term sig a -> m (sub (Term sig) a
 prjTerm = maybe empty pure . (prj <=< unTerm)
 
 
-iter :: (Algebra sig m, forall f . Functor f => Functor (sig f)) => Term sig a -> m a
+iter :: Algebra sig m => Term sig a -> m a
 iter = \case
   Var a -> pure a
   Alg t -> alg (hmap iter t)
@@ -88,9 +86,7 @@ iter = \case
 
 cata
   :: forall sig m a
-  .  ( HFunctor sig
-     , forall g . Functor g => Functor (sig g)
-     )
+  .  HFunctor sig
   => (forall x . x -> m x)
   -> (forall x . sig m x -> m x)
   -> (Term sig a -> m a)

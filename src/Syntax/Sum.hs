@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleContexts, FlexibleInstances, MultiParamTypeClasses, PolyKinds, TypeOperators #-}
+{-# LANGUAGE ConstraintKinds, DeriveGeneric, DeriveTraversable, FlexibleContexts, FlexibleInstances, MultiParamTypeClasses, PolyKinds, TypeFamilies, TypeOperators #-}
 module Syntax.Sum
 ( -- * Sum syntax
   (:+:)(..)
@@ -6,9 +6,19 @@ module Syntax.Sum
   -- * Membership
 , Inject(..)
 , Project(..)
+, Member
+, Members
 ) where
 
-import Control.Effect.Sum ((:+:)(..))
+import Data.Kind (Constraint)
+import GHC.Generics (Generic1)
+
+data (f :+: g) (m :: * -> *) k
+  = L (f m k)
+  | R (g m k)
+  deriving (Eq, Foldable, Functor, Generic1, Ord, Show, Traversable)
+
+infixr 4 :+:
 
 unSum :: (f t a -> b) -> (g t a -> b) -> (f :+: g) t a -> b
 unSum f _ (L l) = f l
@@ -65,3 +75,15 @@ instance {-# OVERLAPPABLE #-}
       => Project t (l :+: r) where
   prj (R r) = prj r
   prj _     = Nothing
+
+
+type Member sub sup = (Inject sub sup, Project sub sup)
+
+-- | Decompose sums on the left into multiple 'Member' constraints.
+--
+-- Note that while this, and by extension 'Control.Algebra.Has', can be used to group together multiple membership checks into a single (composite) constraint, large signatures on the left can slow compiles down due to [a problem with recursive type families](https://gitlab.haskell.org/ghc/ghc/issues/8095).
+--
+-- @since 1.0.0.0
+type family Members sub sup :: Constraint where
+  Members (l :+: r) u = (Members l u, Members r u)
+  Members t         u = Member t u
